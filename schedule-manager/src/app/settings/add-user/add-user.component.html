@@ -1,0 +1,22 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Add a new user</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" novalidate>
+      <mat-form-field appearance ="outline">
+        <mat-label>Name</mat-label>
+        <input matInput  placeholder="Name" formControlName="name" required>
+      </mat-form-field>
+      <div *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"></div>
+      <mat-form-field appearance ="outline">
+        <mat-label>Email</mat-label>
+        <input type="email" matInput  placeholder="Email" formControlName="email" required>
+      </mat-form-field>
+      <div *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"></div>
+    </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <button (click)="addUser(form.value['name'], form.value['email'])" type="submit" [disabled]="form.pristine || form.invalid" mat-raised-button color="primary">Add user</button>
+  </mat-card-actions>
+</mat-card>
