@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose';
 const userModel = mongoose.model('User', userSchema);
 
 class Users {
-    addUser(req, res){
+    addUser(req, res) {
         const userDoc = req.body;
         userModel.create(userDoc).then((response: any) => {
             return res.json({ user: response, message: 'User successfully added'});

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-add-user',
@@ -10,11 +11,12 @@ import { UserService } from 'src/app/services/user.service';
 export class AddUserComponent implements OnInit {
 
   form: FormGroup;
+  result: any;
   constructor(private fb: FormBuilder, private us: UserService) {
     this.createForm();
   }
 
-  createForm(){
+  createForm() {
     this.form = this.fb.group({
       name: ['', Validators.required],
       email: ['', Validators.email]
@@ -23,10 +25,11 @@ export class AddUserComponent implements OnInit {
   ngOnInit() {
   }
 
-  addUser(name, email){
+  addUser(name, email) {
     // subscribe part is to display the result of our post request
     this.us.addUser(name, email).subscribe(res => {
-      console.log(res);
+      this.result = JSON.stringify(res, null, 2);
+      console.log(this.result);
     });
   }
 }

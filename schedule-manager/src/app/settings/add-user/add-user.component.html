@@ -20,3 +20,10 @@
     <button (click)="addUser(form.value['name'], form.value['email'])" type="submit" [disabled]="form.pristine || form.invalid" mat-raised-button color="primary">Add user</button>
   </mat-card-actions>
 </mat-card>
+
+<mat-card>
+  <mat-card-title>Results retrieved from server</mat-card-title>
+  <mat-card-content>
+    <div>{{result}}></div>
+  </mat-card-content>
+</mat-card>

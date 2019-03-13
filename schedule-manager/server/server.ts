@@ -25,6 +25,7 @@ mongoose.connect(config.dbUrl, { useNewUrlParser: true})
 );
 
 const app = express();
+
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/users', Routes.activate().users());

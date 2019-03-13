@@ -6,12 +6,10 @@ class Routes {
         return new this();
     }
 
-    /**
-     * Defines /users routes
-     */
+    // defines /users routes
     users(): Router {
         const router = Router();
-        router.post('/', User.addUser);
+        router.post('/', User.addUser);     // add a user on this route
         return router;
     }
 }

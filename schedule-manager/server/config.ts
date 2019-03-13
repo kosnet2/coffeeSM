@@ -6,4 +6,5 @@
 const config = {
     dbUrl: 'mongodb://localhost:27017/schedule-manager'
 };
+
 export default config;
