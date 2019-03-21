@@ -10,13 +10,26 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
 
-  addUser(name, email): Observable<any> {
+  addUser(name, surname, alias, age, email, password, priviledge, hourly, fixed): Observable<any> {
     const obj = {
       name: name,
-      email: email
+      surname: surname,
+      alias: alias,
+      age: age,
+      email: email,
+      password: password,
+      priviledge: priviledge,
+      date: {
+          hourly: hourly,
+          fixed: fixed,
+      }
     };
 
     console.log(obj);
     return this.http.post(`${environment.serverUrl}/users`, obj); //add to users database
   }
+
+
+
+  
 }

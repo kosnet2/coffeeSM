@@ -7,16 +7,20 @@ import { AppComponent } from './app.component';
 import { SettingsComponent } from './settings/settings.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { ReportsComponent } from './reports/reports.component';
+import { CommonModule } from '@angular/common';  
 import { ReactiveFormsModule} from '@angular/forms';
 import { HttpClientModule} from '@angular/common/http';
 import { MatButtonModule,
          MatCardModule,
          MatInputModule,
+         MatGridListModule,
          MatFormFieldModule,
-        MatCheckboxModule,
-        MatDatepickerModule,
-        MatRadioModule,
-        MatSelectModule } from '@angular/material';
+         MatCheckboxModule,
+         MatDatepickerModule,
+         MatRadioModule,
+         MatListModule,
+         MatExpansionModule,
+         MatSelectModule } from '@angular/material';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AddUserComponent } from './settings/add-user/add-user.component';
 import { UserService } from './services/user.service';
@@ -31,6 +35,7 @@ import { UserService } from './services/user.service';
     ],
     imports: [
         BrowserModule,
+        CommonModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
@@ -43,7 +48,10 @@ import { UserService } from './services/user.service';
         MatCheckboxModule,
         MatDatepickerModule,
         MatRadioModule,
-        MatSelectModule
+        MatSelectModule,
+        MatGridListModule,
+        MatExpansionModule,
+        MatListModule
     ],
     providers: [UserService],
     bootstrap: [AppComponent]
