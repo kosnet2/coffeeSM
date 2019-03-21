@@ -1,0 +1,53 @@
+<mat-accordion class="headers-align">
+  <mat-expansion-panel 
+    *ngFor= "let user of users; let i=index;" 
+    [expanded]="step === i" 
+    (opened)="setStep(i)"
+    >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{user['name'] + ' ' + user['surname']| titlecase}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{user['priviledge'] | titlecase}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-card>
+      <mat-card-content fxLayout="row" fxLayoutAlign="space-evenly">
+        <mat-card fxLayout="column" fxFlex="60%">
+          <mat-card-header>
+            <mat-card-title>User details</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row" *ngFor="let f of getClassProperties(user)">
+              <div  fxLayout="column" fxFlex="30%"> 
+                  {{f | titlecase}}
+              </div>
+              <div  fxLayout="column" fxFlex="70%">
+                  <div *ngIf="f !== 'rate'; else rate">
+                      {{user[f]}}
+                  </div>
+                  <ng-template #rate>
+                    <div *ngIf="user[f]['hourly']">{{user[f]['hourly']}}&euro;/hour</div>
+                    <div *ngIf="user[f]['fixed']">{{user[f]['fixed']}}&euro;/month</div>
+                    <div *ngIf="user[f]['unpaid']">-</div>
+                  </ng-template>
+              </div>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <div fxLayout="row">
+                <button fxLayout="column" fxFlex="50%" mat-flat-button color="basic" (click)="onEditUser(i)">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button fxLayout="column" fxFlex="50%" mat-flat-button color="warn" (click)="onDeleteUser(i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+          </mat-card-actions>
+        </mat-card>
+      </mat-card-content>
+    </mat-card>
+    <button mat-button color="primary" (click)="setStep(-1)">Back</button>
+  </mat-expansion-panel>
+</mat-accordion>

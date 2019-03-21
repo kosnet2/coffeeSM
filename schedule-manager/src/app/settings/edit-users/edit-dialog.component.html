@@ -1,0 +1,7 @@
+<h2 mat-dialog-title>Edit user</h2>
+<div mat-dialog-content>
+    <app-add-user [userData]="userData" [modalMode]="true" (userUpdated)="onYesClick($event)"></app-add-user>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Close</button>
+</div>

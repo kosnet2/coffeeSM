@@ -14,31 +14,11 @@ import {
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'schedule-manager';
-  loading = false;
+  title = 'Coffeeology Schedule Manager';
 
-  constructor(private router: Router){
-    this.router.events.subscribe((event: Event) => {
-       this.navigationInterceptor(event);
-    });
-  }
+  constructor(private router: Router) { }
 
-  private navigationInterceptor(event: Event): void {
-    if (event instanceof NavigationStart) {
-      this.loading = true;
-    }
-    if (event instanceof NavigationEnd) {
-      this.loading = false;
-    }
-    if (event instanceof NavigationCancel) {
-      this.loading = false;
-    }
-    if (event instanceof NavigationError){
-      this.loading = false;
-    }
-  }
-
-  onNavigate(url){
+  onNavigate(url) {
     this.router.navigate([url]);
   }
 }

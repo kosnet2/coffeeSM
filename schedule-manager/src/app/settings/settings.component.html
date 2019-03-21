@@ -1,4 +1,14 @@
-<p>
-  settings works!
-</p>
-<app-add-user></app-add-user>
+
+<mat-card>
+    <mat-card-content fxLayout ="row" fxLayoutAlign="space-evenly">
+        <button mat-button color="primary" fxLayout="column" fxFlex="50%" routerLink="../settings/addUser">
+            <mat-icon>add</mat-icon>
+            Add user
+        </button>
+        <button mat-button color="primary" fxLayout="column" fxFlex="50%" routerLink="../settings/editUsers">
+            <mat-icon>edit</mat-icon>
+            Edit users
+        </button>
+    </mat-card-content>
+</mat-card>
+<router-outlet></router-outlet>
