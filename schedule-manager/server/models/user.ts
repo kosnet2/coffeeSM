@@ -1,3 +1,6 @@
+/*
+*   The mongoose schema defining each user
+*/
 import * as mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -26,22 +29,36 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    position: {
+        type: String,
+        required: false
+    },
     password: {
         type: String,
         required: true
     },
     rate: {
-        type: {
-            hourly: { type: Number, required: false},
-            fixed: { type: Number, required: false},
-            unpaid: { type: Boolean, required: false}
-        },
+        type: String,
+        required: true
+    },
+    amount: {
+        type: Number,
         required: true
     },
     unavailability: {
         type: {
-            daysOff: [Boolean],
-            hoursOff: [{start: Date, end: Date}],
+            permanent: {
+                monday: [String],
+                tuesday: [String],
+                wednesday: [String],
+                thursday: [String],
+                friday: [String],
+                saturday: [String],
+                sunday: [String]
+            },
+            requested: [
+                { fromDate: Date, toDate: Date}
+            ]
         },
         required: false,
     }

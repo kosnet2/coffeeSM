@@ -1,21 +1,42 @@
+/*
+*   The class defining a user
+*/
 export class User {
-    name: String;
-    surname: String;
-    email: String;
-    password: String;
-    alias ?: String;
+    name: string;
+    surname: string;
+    email: string;
+    password: string;
+    alias ?: string;
     age ?: Number;
-    priviledge: String;
-    rate: {
-        hourly ?: Number,
-        fixed ?: Number,
-        unpaid ?: Boolean,
-    };
+    priviledge: string;
+    position: string;
+    rate: string;
+    amount: Number;
     unavailability ?: {
-        daysOff ?: Array<Boolean>,
-        hoursOff ?: Array<{
-            start: Date,
-            end: Date
-        }>
+        permanent?: {
+            monday: Array<string>,
+            tuesday: Array<string>,
+            wednesday: Array<string>,
+            thursday: Array<string>,
+            friday: Array<string>,
+            saturday: Array<string>,
+            sunday: Array<string>
+        },
+        requested?: Array<{fromDate: Date, toDate: Date}>
     };
+
+    constructor() {
+        this.unavailability = {
+            permanent: {
+                monday: [],
+                tuesday: [],
+                wednesday: [],
+                thursday: [],
+                friday: [],
+                saturday: [],
+                sunday: []
+            },
+            requested: []
+        };
+    }
 }

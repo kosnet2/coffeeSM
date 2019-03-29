@@ -1,0 +1,56 @@
+<mat-card>
+  <mat-card-content>
+    <form [formGroup]="form" novalidate>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div fxLayout="column" fxFlex = "25%">Bar</div>
+      <div fxLayout="column" fxFlex = "70%">
+        <mat-form-field appearance ="outline">
+          <mat-label>Number of positions</mat-label>
+          <input 
+            matInput
+            appNumbersOnly
+            formControlName="bar"
+            placeholder="Positions" 
+            required>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div fxLayout="column" fxFlex = "25%">Cleaners</div>
+      <div fxLayout="column" fxFlex = "70%">
+        <mat-form-field appearance ="outline">
+          <mat-label>Number of positions</mat-label>
+          <input 
+            matInput 
+            appNumbersOnly
+            formControlName="cleaners"
+            placeholder="Positions" 
+            required>
+        </mat-form-field>
+      </div>
+    </div>
+    
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <div fxLayout="column" fxFlex = "25%">Kitchen</div>
+      <div fxLayout="column" fxFlex = "70%">
+        <mat-form-field appearance ="outline">
+          <mat-label>Number of positions</mat-label>
+          <input 
+            matInput  
+            appNumbersOnly
+            formControlName="kitchen"
+            placeholder="Positions" 
+            required>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  </mat-card-content>
+  <mat-card-actions>
+    <div fxLayout="row" fxLayoutAlign="space-between">
+      <button mat-raised-button (click)="onUpdatePositions()" [disabled]="form.pristine || form.invalid" fxLayout="column" fxFlex="45%">Accept</button>
+      <button mat-raised-button fxLayout="column" fxFlex="45%">Cancel</button>
+    </div>
+  </mat-card-actions>
+</mat-card>

@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef, Input, ViewChildren, Output, 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-user',
@@ -11,13 +12,8 @@ import { User } from 'src/app/models/user';
 export class AddUserComponent implements OnInit {
 
   /* References on the template */
-  @ViewChild('hourly') hourly: ElementRef;                  // hourly radio-button
-  @ViewChild('fixed') fixed: ElementRef;                    // fixed radio-button
-  @ViewChild('unpaid') unpaid: ElementRef;                  // unpaid radio-button
   @ViewChild('nameInput') nameInput: ElementRef;            // name input field
   @ViewChild('passwordInput') passwordInput: ElementRef;    // password input field
-  @ViewChild('hourlyInput') hourlyInput: ElementRef;        // hourly input field
-  @ViewChild('fixedInput') fixedInput: ElementRef;          // fixed input field
 
   /* Inputs for this component. I am using them when I am inputting the userData in the edit-dialog component*/
   @Input() userData: User;
@@ -26,12 +22,15 @@ export class AddUserComponent implements OnInit {
   /* Events that this component might emit */
   @Output() userUpdated: EventEmitter<any> = new EventEmitter<any>();
 
+  /* Instance of Angular reactive form */
   form: FormGroup;
-  priviledges = ['staff', 'manager', 'logistics'];
-  hRate: any;
-  fRate: any;
 
-  constructor(private fb: FormBuilder, private us: UserService) {
+  /* The below are used as iterables on html select elements */
+  priviledges = ['staff', 'manager', 'logistics'];
+  rates = ['hourly', 'fixed', 'unpaid'];
+  positions = ['bar', 'cleaners', 'kitchen'];
+
+  constructor(private fb: FormBuilder, private us: UserService, private router: Router) {
     this.createForm();
   }
 
@@ -50,18 +49,6 @@ export class AddUserComponent implements OnInit {
       // tslint:disable-next-line: forin
       for (const key in this.form.controls) {
         this.form.controls[key].setValue(this.userData[key]);
-      }
-      const v = this.form.controls['rate'].value;
-
-      // specific functionality for rates
-      if (v['hourly']) {
-        this.hourly['checked'] = true;
-        this.hourlyInput.nativeElement.value = v['hourly'];
-      } else if (v['fixed']) {
-        this.fixed['checked'] = true;
-        this.fixedInput.nativeElement.value = v['fixed'];
-      } else {
-        this.unpaid['checked'] = true;
       }
 
       // mark the form as modified to pass validation and
@@ -82,7 +69,7 @@ export class AddUserComponent implements OnInit {
     let newPassword = '';
     const alphabet = 'abcdefghijklmnopqrstuvxyzwABCDEFGHIJKLMNOPQRSTUVXYZW0123456789';
 
-    for (let i = 0; i < 8; i++){
+    for (let i = 0; i < 8; i++) {
       const idx = Math.floor((Math.random() * alphabet.length));
       newPassword += alphabet[idx];
     }
@@ -106,8 +93,10 @@ export class AddUserComponent implements OnInit {
       email: ['', Validators.email],
       age: [''],
       priviledge: ['', Validators.required],
+      position: [''],
       password: ['', Validators.minLength(4)],
       rate: ['', Validators.required],
+      amount: ['', Validators.required]
     });
   }
 
@@ -115,7 +104,9 @@ export class AddUserComponent implements OnInit {
   * This function is called only when this component is
   * rendered in normal mode.
   * For now it just prints to the log that the user has
-  * been successfully added
+  * been successfully added.
+  * TODO In the future on success an email should be sent to the user
+  *      to set up his password.
   */
   onAddUser() {
     const newUser = this.form.value;
@@ -126,18 +117,10 @@ export class AddUserComponent implements OnInit {
       user[key] = newUser[key];
     }
 
-    // Have to do this seperately since its a nested object
-    if (newUser.rate === 'unpaid') {
-      user.rate = {'unpaid': true };
-    } else if (newUser.rate === 'fixed') {
-      user.rate = {'fixed': +this.fixedInput.nativeElement.value};  // + is for casting a string to integer
-    } else if (newUser.rate === 'hourly') {
-      user.rate = {'hourly': +this.hourlyInput.nativeElement.value};
-    }
-
     this.us.addUser(user).subscribe(res => {
       if (res) {
         console.log('User succesfully added');
+        this.router.navigateByUrl('/settings/editUsers');
       } else {
         console.log('User was not added!');
       }
@@ -154,16 +137,8 @@ export class AddUserComponent implements OnInit {
   * the specific user that is being editted on the frontend.
   */
   onUpdateUser() {
-    const updatedUser = this.form.value;
+    const updatedUser = {...this.form.value};
     updatedUser['_id'] = this.userData['_id'];
-
-    if (updatedUser.rate === 'unpaid'){
-      updatedUser.rate = { 'unpaid' : true};
-    } else if (updatedUser.rate === 'fixed') {
-      updatedUser.rate = { 'fixed': +this.fixedInput.nativeElement.value };
-    } else if (updatedUser.rate === 'hourly') {
-      updatedUser.rate = { 'hourly': +this.hourlyInput.nativeElement.value };
-    }
 
     this.us.updateUser(updatedUser).subscribe(res => {
       if (res.success === true) {

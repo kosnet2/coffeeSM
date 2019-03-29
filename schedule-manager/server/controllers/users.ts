@@ -5,6 +5,8 @@ import * as mongoose from 'mongoose';
 const userModel = mongoose.model('User', userSchema);
 
 class Users {
+
+    /* Add user to database */
     addUser(req, res) {
         const userDoc = req.body;
         userModel.create(userDoc).then((response: any) => {
@@ -14,6 +16,7 @@ class Users {
         });
     }
 
+    /* Get list of all the users from the database */
     getUsers(req, res) {
         userModel.find().then((users: any) => {
             return res.json(users);
@@ -26,6 +29,7 @@ class Users {
         });
     }
 
+    /* Delete the specified user from the database */
     deleteUser(req, res) {
         const id = req.params.id;
 
@@ -49,6 +53,7 @@ class Users {
         });
     }
 
+    /* Update a specific user. The whole user object is passed but the _id is used to identify the proper document*/
     updateUser(req, res) {
         const userDoc = req.body;
 
