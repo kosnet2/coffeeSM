@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Edit user unavailability</h2>
+<div mat-dialog-content>
+  <!-- Here goes the code -->
+  <div fxLayout="row" >
+    <mat-tab-group fxLayout="column" mat-align-tabs="center" animationDuration="1500ms" fxFlex="100%">
+        <!-- Requested period -->
+        <mat-tab label="Requested">
+          <br>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+              <h4 fxLayout="column" fxFlex="30%">Requested</h4>
+              <mat-chip-list #chipList3 fxLayout="column" fxFlex="65%">
+                <ng-container *ngFor="let range of userData.unavailability.requested">
+                  <mat-chip 
+                    [selectable]="true" 
+                    [removable]="true" 
+                    (removed)="removeRequestedRange(range)">
+                      {{(range.fromDate | date)+' - '+(range.toDate | date)}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                  </mat-chip>
+                </ng-container>
+              </mat-chip-list>
+            </div>
+            <hr>
+          <br>
+          <div fxLayout="row" fxLayoutAlign="space-between">
+            <ngx-mat-drp (selectedDateRangeChanged)="addRequestedRange($event, dateRangePicker)" [options]="options" #dateRangePicker></ngx-mat-drp>
+          </div>
+        </mat-tab>
+          <!-- Long term unavailability -->
+          <mat-tab label="Permanent"> 
+            <br>
+            <div fxLayout="row" *ngFor="let weekDay of weekDays" fxLayoutAlign="space-between">
+              <div fxLayout="column" fxFlex="30%">
+                <h4>{{weekDay | titlecase}}</h4>
+              </div>
+              <div fxLayout="column" fxFlex="70%">
+                <mat-form-field>
+                  <mat-chip-list #chipList>
+                    <mat-chip *ngFor="let timerange of userData.unavailability.permanent[weekDay]" [selectable]="true" [removable]="true" (removed)="removeTimeRange(weekDay, timerange)">
+                      {{timerange}}
+                      <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input 
+                      matTooltip="eg. 08:00-00:00"
+                      placeholder="Time range"
+                      [matChipInputFor]="chipList"
+                      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                      [matChipInputAddOnBlur]="true"
+                      (matChipInputTokenEnd)="addTimeRange(weekDay, $event)">
+                  </mat-chip-list>
+                </mat-form-field>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+  </div>
+</div>
+<div mat-dialog-actions fxFlexLayout="row" fxFlexLayoutAlign="space-between">
+  <button fxFlexLayout="column" fxFlex="48%" mat-button (click)="onYesClick()">Accept</button>
+  <button fxFlexLayout="column" fxFlex="48%" mat-button (click)="onNoClick()">Cancel</button>
+</div>

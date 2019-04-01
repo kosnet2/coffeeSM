@@ -28,7 +28,8 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use('/users', Routes.activate().users());
+app.use('/users', Routes.activate().users());           // activate /users server path
+app.use('/positions', Routes.activate().positions());   // activate /positions server path
 
 const port = process.env.PORT || 3000;
 

@@ -5,6 +5,8 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="form" novalidate>
+
+      <!-- NAME AND SURNAME -->
         <div fxLayout="row" fxLayoutAlign="space-between">
           <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
             <mat-label>Name</mat-label>
@@ -15,10 +17,9 @@
               formControlName="name" 
               required>
             <mat-error *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
-                This field is required
+              This field is required
             </mat-error>
           </mat-form-field>
-          <br>
           <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
             <mat-label>Surname</mat-label>
             <input 
@@ -31,7 +32,10 @@
             </mat-error>
           </mat-form-field>
         </div>
+        
         <br>
+
+        <!-- ALIAS AND AGE -->
         <div fxLayout="row" fxLayoutAlign="space-between">
           <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
             <mat-label>Alias</mat-label>
@@ -40,7 +44,6 @@
               placeholder="Alias" 
               formControlName="alias">
           </mat-form-field>
-          <br>
           <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
             <mat-label>Age</mat-label>
             <input 
@@ -51,105 +54,116 @@
               formControlName="age">
           </mat-form-field>
         </div>
+        
         <br>
-        <div fxLayout="row">
+        
+        <!-- EMAIL AND PASSWORD -->
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Email</mat-label>
+            <input 
+              type="email"
+              matInput  
+              placeholder="Email" 
+              formControlName="email" 
+              required>
+            <mat-error *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+              Please enter a valid email address
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field  fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Password</mat-label>
+            <input 
+              type="text" 
+              #passwordInput
+              matInput  
+              placeholder="Password" 
+              formControlName="password" 
+              required>
+            <button (click)="generatePassword()" matSuffix mat-flat-button>
+              <mat-icon>autorenew</mat-icon>
+            </button>
+            <mat-error *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+              Please enter a longer password
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <br>
+        
+        <!-- PRIVILEDGE DROP DOWN -->
+        <div fxLayout="row" fxLayoutAlign="space-between">
           <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
             <mat-label>Priviledge</mat-label>
-            <mat-select 
+            <mat-select
+              #priviledgeSelect
               placeholder="Select a priviledge" 
               formControlName="priviledge" 
               required>
               <mat-option *ngFor="let p of priviledges" [value] = "p">
-                {{p}}
+                {{p | titlecase}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="form.controls['priviledge'].invalid && (form.controls['priviledge'].dirty || form.controls['priviledge'].touched)">
               Please choose a priviledge
             </mat-error>
           </mat-form-field>
-        </div>
-        <br>
-        <div fxLayout="row" fxLayoutAlign="space-between">
-        <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
-          <mat-label>Email</mat-label>
-          <input 
-            type="email"
-            matInput  
-            placeholder="Email" 
-            formControlName="email" 
-            required>
-          <mat-error *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
-            Please enter a valid email address
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field  fxLayout="column" fxFlex="47%" appearance ="outline">
-          <mat-label>Password</mat-label>
-          <input 
-            type="text" 
-            #passwordInput
-            matInput  
-            placeholder="Password" 
-            formControlName="password" 
-            required>
-          <button (click)="generatePassword()" matSuffix mat-flat-button>
-            <mat-icon>autorenew</mat-icon>
-          </button>
-          <mat-error *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
-            Please enter a longer password
-          </mat-error>
-        </mat-form-field>
-      </div>
-        <br>
-        <mat-radio-group formControlName="rate" required>
-          <mat-label>Rate</mat-label>
-          <br><br>
-          <mat-radio-button #hourly (click)="fixedInput.value=''" value = "hourly">
-              <mat-form-field appearance ="outline">
-                <mat-label>Hourly</mat-label>
-                <input 
-                  appNumbersOnly 
-                  type="number" 
-                  matInput 
-                  placeholder="Hourly rate" 
-                  [disabled]="!hourly['checked']" 
-                  #hourlyInput 
-                  required>
-              </mat-form-field>
-            </mat-radio-button>
-          <br><br>
-          <mat-radio-button #fixed (click)="hourlyInput.value=''" value = "fixed" >
-            <mat-form-field appearance ="outline">
-              <mat-label>Fixed</mat-label>
-              <input 
-                appNumbersOnly 
-                type="number" 
-                matInput  
-                placeholder="Fixed rate"
-                #fixedInput
-                [disabled]="!fixed['checked']" 
-                required>
+          <mat-form-field *ngIf="priviledgeSelect.value === 'staff'" fxLayout="column" fxFlex="47%" appearance ="outline">
+              <mat-label>Position</mat-label>
+              <mat-select
+                placeholder="Select a position" 
+                formControlName="position" 
+                >
+                <mat-option *ngFor="let p of positions" [value] = "p">
+                  {{p | titlecase}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="form.controls['position'].invalid && (form.controls['position'].dirty || form.controls['position'].touched)">
+                Please choose a position
+              </mat-error>
             </mat-form-field>
-          </mat-radio-button>
-          <br><br>
-          <mat-radio-button 
-            #unpaid 
-            (click)="fixedInput.value = ''; hourlyInput.value=''" 
-            value="unpaid">Unpaid
-          </mat-radio-button>
-        </mat-radio-group>
+        </div>
+
+        <!-- RATE TYPE DROPDOWN AND RATE AMOUNT -->
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance="outline">
+            <mat-label>Rate type</mat-label>
+            <mat-select
+              placeholder="Select a rate type"
+              formControlName="rate"
+              required>
+              <mat-option *ngFor="let r of rates" [value]="r">
+                {{r | titlecase}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['rate'].invalid && (form.controls['rate'].dirty || form.controls['rate'].touched)">
+              Please choose a rate type
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input
+              appNumbersOnly
+              type="number"
+              matInput
+              placeholder="Amount"
+              formControlName="amount">
+            <mat-error *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || form.controls['amount'].touched)">
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>        
       </form>
     </mat-card-content>
+
+    <!-- FORM ACCEPT BUTTONS -->
     <mat-card-actions>
       <!-- Displayed only when the we are NOT IN modal mode -->
       <button 
         *ngIf="modalMode === false" 
         (click)="onAddUser()" 
         type="submit" 
-        [disabled]="form.pristine || 
-                    form.invalid ||
-                    hourly['checked'] && hourlyInput.value === '' ||
-                    fixed['checked'] && fixedInput.value === ''" 
+        [disabled]="form.pristine || form.invalid"
         mat-raised-button 
         color="primary">Add user
       </button>
@@ -158,10 +172,7 @@
         *ngIf="modalMode === true" 
         (click)="onUpdateUser()" 
         type="submit" 
-        [disabled]="form.pristine || 
-                    form.invalid ||
-                    hourly['checked'] && hourlyInput.value === '' ||
-                    fixed['checked'] && fixedInput.value === ''" 
+        [disabled]="form.pristine || form.invalid" 
         mat-raised-button 
         color="primary">Edit user
       </button>

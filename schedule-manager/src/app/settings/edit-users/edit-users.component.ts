@@ -1,9 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { COMMA, ENTER} from '@angular/cdk/keycodes';
+import { MatChipInputEvent} from '@angular/material';
+import { PresetItem, NgxDrpOptions, Range} from 'ngx-mat-daterange-picker';
 
-
+/*
+* DELETE USER DIALOG COMPONENT
+*/
 @Component({
   selector: 'app-delete-dialog',
   templateUrl: 'delete-dialog.component.html'
@@ -12,32 +17,20 @@ export class DeleteDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteDialogComponent>) { }
 
-  /*
-  * When the user presses on the No button
-  * the dialog returns an object with negative message.
-  * Expected behavior: onNoClick() no changes should take place on the user
-  */
+  /* Returns an undefined object */
   onNoClick(): void {
-    this.dialogRef.close({success: false});
+    this.dialogRef.close();
   }
 
-  /*
-  * When the users presses on the Yes button
-  * the dialog returns an object with a positive message.
-  * Expected behavior: onYesClick() the changes should be applied.
-  */
+  /* Returns an object with a positive message */
   onYesClick(): void {
     this.dialogRef.close({success: true});
   }
 }
 
+
 /*
-* Nested component which is standard procedure for
-* opening an angular dialog component. In this case
-* it is the Edit modal where the current user that
-* is being edited is passed on.
-* Functionality for what happens when the modal is
-* succesfully opened or closed is defined.
+* EDIT USER DIALOG COMPONENT
 */
 @Component({
   selector: 'app-edit-dialog',
@@ -53,23 +46,153 @@ export class EditDialogComponent implements OnInit {
 
   ngOnInit() { }
 
-  /*
-  * On Cancel/No/Abort an object with a negative message is returned;
-  */
+  /* An undefined object is returned */
   onNoClick(): void {
     this.dialogRef.close();
   }
 
-  /*
-  * On Accept/Yes/Ok an object with a positive message and the updated
-  * user is returned.
-  */
+  /* A positive message and the modified user is returned */
   onYesClick(user): void {
     this.dialogRef.close({success: true, user: user});
   }
 }
 
 
+/*
+* EDIT USER UNAVAILABILITY DIALOG COMPONENT
+*/
+@Component({
+  selector: 'app-edit-unavailability-dialog',
+  templateUrl: 'edit-unavailability-dialog.component.html'
+})
+export class EditUnavailabilityDialogComponent implements OnInit {
+  /* must have variables - rangedatepicker - chip list*/
+  readonly separatorKeysCodes: number[] = [ENTER, COMMA];
+  range: Range = {fromDate: new Date(), toDate: new Date()};
+  options: NgxDrpOptions;
+  presets: Array<PresetItem> = [];
+
+  /* helper variables*/
+  userData: User;
+  weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  timesCalled = 0;
+  currentDay: Date;
+
+  constructor(public dialogRef: MatDialogRef<EditUnavailabilityDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) data: User
+    ) { this.userData = data; }  // error is coming from here
+
+  ngOnInit() {
+    this.currentDay = new Date();
+    this.currentDay.setHours(0, 0, 0);
+    this.setUpDatePicker();
+  }
+
+  /* Sets up the rangedatepicker */
+  setUpDatePicker() {
+    const today = new Date();
+    today.setHours(0, 0, 0);
+    const tonight = new Date();
+    tonight.setDate(tonight.getDate() + 1);
+    tonight.setHours(0, 0, 0);
+
+    this.setupPresets();
+    this.options = {
+      presets: this.presets,
+      format: 'mediumDate',
+      range: {fromDate: today, toDate: tonight},
+      applyLabel: 'Submit',
+      calendarOverlayConfig: {
+        shouldCloseOnBackdropClick: false,
+      }
+    };
+  }
+
+  /* setup preset buttons on rangedatepicker */
+  setupPresets() {
+    const forwardDate = (numOfDays) => {
+      const now = new Date();
+      return new Date(now.setDate(now.getDate() + numOfDays));
+    };
+
+    const today = new Date();
+    today.setHours(0, 0, 0);
+    const tomorrow = forwardDate(1);
+    const plus2 = forwardDate(2);
+    const plus7 = forwardDate(7);
+    const plus30 = forwardDate(30);
+    const currMonthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const nextMonthStart = new Date(today.getFullYear(), today.getMonth() + 1, 1);
+    const nextMonthEnd = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+
+    this.presets =  [
+      {presetLabel: 'Today' , range: { fromDate: today, toDate: tomorrow}},
+      {presetLabel: 'Tomorrow', range: { fromDate: tomorrow, toDate: plus2 }},
+      {presetLabel: 'Next 7 Days', range: { fromDate: today, toDate: plus7 }},
+      {presetLabel: 'Next 30 Days', range: { fromDate: today, toDate: plus30 }},
+      {presetLabel: 'This Month', range: { fromDate: today, toDate: currMonthEnd }},
+      {presetLabel: 'Next Month', range: { fromDate: nextMonthStart, toDate: nextMonthEnd }}
+    ];
+  }
+
+  /* handler function that receives the updated date range object */
+  addRequestedRange(range: Range) {
+    // First time its called automatically hence the first check
+    if (this.timesCalled++ > 0 && range.fromDate < range.toDate) {
+      this.userData.unavailability.requested.push(range);
+    }
+  }
+
+  /* removes the requested dateRange */
+  removeRequestedRange(range: Range) {
+    const index = this.userData.unavailability.requested.indexOf(range);
+    if (index >= 0) {
+      this.userData.unavailability.requested.splice(index, 1);
+    }
+  }
+
+  /* adds time range  */
+  addTimeRange(weekDay: string, event: MatChipInputEvent): void {
+    const input = event.input;
+    const value = event.value;
+    const regex: RegExp = new RegExp(/^([01][0-9]|2[0-3]):[0-5][0-9]-([01][0-9]|2[0-3]):[0-5][0-9]$/g);
+    const valid = regex.test(value);
+
+    // Add new time range
+    if ((value || '').trim() && valid) {
+      this.userData.unavailability.permanent[weekDay].push(value.trim());
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  /* removes specified time range */
+  removeTimeRange(weekDay: string, timeRange: string): void {
+    const index = this.userData.unavailability.permanent[weekDay].indexOf(timeRange);
+    if (index >= 0) {
+      this.userData.unavailability.permanent[weekDay].splice(index, 1);
+    }
+  }
+
+  /* returns an undefined object */
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  /* returns a positive message and the modified user */
+  onYesClick(): void {
+    this.dialogRef.close({success: true, user: {...this.userData}});
+  }
+}
+
+
+
+/*
+* EDIT USERS COMPONENT
+*/
 @Component({
   selector: 'app-edit-users',
   templateUrl: './edit-users.component.html',
@@ -78,17 +201,13 @@ export class EditDialogComponent implements OnInit {
 export class EditUsersComponent implements OnInit {
   users: User[] = [];
   step = -1;
+  displayableUserProperties = ['name', 'surname', 'email', 'password', 'alias', 'priviledge', 'position', 'rate', 'amount', 'age'];
 
   constructor(private us: UserService, public dialog: MatDialog) { }
 
   ngOnInit() { this.getUsers(); }
 
-  /*
-  * Get the list of users from db.
-  * Sort them by priviledge and same the result
-  * in `users` array. The function should be called
-  * only when the component is first rendered.
-  */
+  /* Fetch users from db and sort them by priviledge */
   getUsers() {
     this.us.getUsers().subscribe(res => {
       for (const r of res) {
@@ -102,41 +221,12 @@ export class EditUsersComponent implements OnInit {
   });
   }
 
-  /*
-  * Sets the step index to the one specified.
-  * It is used to know which accordion item should be expanded or
-  * if we want to close and expanded user.
-  * @params index: -1 to close all any other positive number for
-  * a specific user
-  */
+  /* Sets the step for the accordion. Pass -1 to close any expanded */
   setStep(index: number) {
     this.step = index;
   }
 
-  /*
-  * Find out the class properties of a user (since they might vary)
-  * and return them as an iterable to be rendered on HTML.
-  * For this case we need the properties [1 - length - 3] since
-  * 0: ObjectId assigned from Mongo
-  * length - 3: Document creation date
-  * length - 2: Document update date
-  * length - 1: mongoDb _v stamp
-  * The above fields are unnecessary for rendering
-  * TODO: This function should be added to the utility service, that
-  * we will create later
-  */
-  public getClassProperties(user: User) {
-    const properties = Object.getOwnPropertyNames(user);
-    return properties.slice(1, properties.length - 3);
-  }
-
-  /*
-  * On delete user button click, a modal pops up that asks if the
-  * user will be deleted. If the result is positive the user is
-  * deleted from the database and the user is removed from the
-  * array in this components scope. If the result is negative
-  * nothing happens.
-  */
+  /* Delets the user from db and dom*/
   onDeleteUser(index: number) {
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
       autoFocus: true
@@ -155,19 +245,14 @@ export class EditUsersComponent implements OnInit {
     });
   }
 
-  /*
-  * When a user is selected to be edited, a modal dialog
-  * pops up, which allows a user to be edited.
-  * If the user is indeed updated, I update the the users
-  * variable that was rendered before the changes happen.
-  */
+  /* Shows a dialog with a form to edit user details */
   onEditUser(index: number) {
-    // Standard Angular modal code for initializing a dialog and passing information to it.
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.data = {...this.users[index]};
-
-    const dialogRef = this.dialog.open(EditDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(EditDialogComponent, {
+      autoFocus: true,
+      minHeight: '700px',
+      minWidth: '500px',
+      data: {...this.users[index]}
+    });
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
@@ -175,6 +260,27 @@ export class EditUsersComponent implements OnInit {
         for (const key in res.user) {
           this.users[index][key] = res.user[key];
         }
+      }
+    });
+  }
+
+  /* Shows a dialog that allows editing user unavailabilities */
+  onEditUserUnavailability(index: number) {
+    const dialogRef = this.dialog.open(EditUnavailabilityDialogComponent, {
+      autoFocus: true,
+      minHeight: '700px',
+      minWidth: '500px',
+      data: {...this.users[index]}
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.us.updateUser(res.user).subscribe(r => {
+            // tslint:disable-next-line: forin
+            for (const key in r.user) {
+              this.users[index][key] = r.user[key];
+            }
+        });
       }
     });
   }

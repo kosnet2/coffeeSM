@@ -1,0 +1,12 @@
+<!-- Renders the Employee list-->
+<mat-card appearance ="outline">
+	<mat-card-content>
+		<mat-list  *ngFor="let user of users; let i = index">
+			<mat-list-item> <button mat-button (click)="onUserClicked(i)">{{user.name + ' ' + user.alias | titlecase}}</button></mat-list-item>
+		</mat-list>
+	</mat-card-content>
+</mat-card>
+
+
+
+

@@ -10,19 +10,23 @@ export class UserService {
 
  constructor(private http: HttpClient) { }
 
- addUser(user: User): Observable<any> {
-   return this.http.post(`${environment.serverUrl}/users`, user);  //add to users database
- }
+  /* Make http call to add the user */
+  addUser(user: User): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/users`, user);
+  }
 
- getUsers(): Observable<any> {
-   return this.http.get(`${environment.serverUrl}/users`);
- }
+  /* Make http call to get the users */
+  getUsers(): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/users`);
+  }
 
- deleteUser(userId: string): Observable<any> {
-   return this.http.delete(`${environment.serverUrl}/users/${userId}`);
- }
+  /* Make http call to delete a specified user */
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${environment.serverUrl}/users/${userId}`);
+  }
 
- updateUser(updatedUser): Observable<any> {
-   return this.http.put(`${environment.serverUrl}/users`, updatedUser);
- }
+  /* Make http call to update a specific user. The whole user object needs to be passed. */
+  updateUser(updatedUser): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/users`, updatedUser);
+  }
 }

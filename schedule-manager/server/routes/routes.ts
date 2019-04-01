@@ -18,7 +18,7 @@ class Routes {
         return router;
     }
 
-        // defines /users routes
+    // defines /users routes
     schedules(): Router {
         const router = Router();
         router.post('/', Schedule.addSchedule);             // add a schedule on this route

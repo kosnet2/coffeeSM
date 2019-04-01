@@ -1,0 +1,27 @@
+
+<div class="example-container mat-elevation-z8">
+	<table mat-table [dataSource]="employeeData">
+				
+		<!-- Renders all columns -->
+		<ng-container *ngFor="let col of displayedColumns; let j = index" [matColumnDef]="col">
+			<th mat-header-cell *matHeaderCellDef> {{ col | titlecase }} </th>
+			<td mat-cell *matCellDef="let element"> {{element[col]}} </td>
+			</ng-container>
+
+		<!-- Renders the stickly column names -->
+			<tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+			<tr mat-row *matRowDef="let row; columns: displayedColumns;let i = index" (click)="addEmplyeeToSchedule(i, $event)"></tr>
+	</table>
+
+	<mat-card>
+		<button 
+			  (click)="onSaveSchedule()" 
+			  type="submit" 
+			  mat-raised-button 
+			  color="primary">Save schedule
+			</button>
+	</mat-card>
+</div>
+
+
+
