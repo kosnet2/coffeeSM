@@ -1,50 +1,16 @@
-<mat-card>
-      <mat-grid-list cols="6" rowHeight="10:2" >
-            <mat-grid-tile>1</mat-grid-tile>
-            <mat-grid-tile>2</mat-grid-tile>
-            <mat-grid-tile>3</mat-grid-tile>
-            <mat-grid-tile>4</mat-grid-tile>
-            <mat-grid-tile>5</mat-grid-tile>
-            <mat-grid-tile>6</mat-grid-tile>
-      </mat-grid-list>
-  <br>
-  <mat-grid-list cols="6" rowHeight="10:2" >
-      <mat-grid-tile>1</mat-grid-tile>
-      <mat-grid-tile>2</mat-grid-tile>
-      <mat-grid-tile>3</mat-grid-tile>
-      <mat-grid-tile>4</mat-grid-tile>
-      <mat-grid-tile>5</mat-grid-tile>
-      <mat-grid-tile>6</mat-grid-tile>
-</mat-grid-list>
-<br>
-<mat-grid-list cols="6" rowHeight="10:2" >
-      <mat-grid-tile>1</mat-grid-tile>
-      <mat-grid-tile>2</mat-grid-tile>
-      <mat-grid-tile>3</mat-grid-tile>
-      <mat-grid-tile>4</mat-grid-tile>
-      <mat-grid-tile>5</mat-grid-tile>
-      <mat-grid-tile>6</mat-grid-tile>
-</mat-grid-list>
-<br>
-<mat-grid-list cols="6" rowHeight="10:2" >
-      <mat-grid-tile>1</mat-grid-tile>
-      <mat-grid-tile>2</mat-grid-tile>
-      <mat-grid-tile>3</mat-grid-tile>
-      <mat-grid-tile>4</mat-grid-tile>
-      <mat-grid-tile>5</mat-grid-tile>
-      <mat-grid-tile>6</mat-grid-tile>
-</mat-grid-list>
-<br>
-<mat-grid-list cols="6" rowHeight="10:2" >
-      <mat-grid-tile>1</mat-grid-tile>
-      <mat-grid-tile>2</mat-grid-tile>
-      <mat-grid-tile>3</mat-grid-tile>
-      <mat-grid-tile>4</mat-grid-tile>
-      <mat-grid-tile>5</mat-grid-tile>
-      <mat-grid-tile>6</mat-grid-tile>
-</mat-grid-list>
-<br>
 
+<mat-card fxLayout="row" fxLayoutAlign="space-between">
+		<!-- Renders Employee list component -->
+    <div fxLayout="column" fxFlex="15%" appearance ="outline">
+		<app-employee-lister></app-employee-lister>  
+	</div>
+		<!-- Renders Employee info component -->
+	<div fxLayout="column" fxFlex="15%" appearance ="outline">
+			<app-employee-info ></app-employee-info>
+	</div>
 
+	  	<!-- Renders Schedule-viewer component -->
+	<div fxLayout="column" fxFlex="65%" appearance ="outline">
+		<app-schedule-viewer ></app-schedule-viewer>
+	</div>
 </mat-card>
-

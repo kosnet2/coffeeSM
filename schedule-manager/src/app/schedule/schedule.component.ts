@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/models/user';
+import { SchedulePickerService } from '../services/schedule-picker.service';
 
 @Component({
   selector: 'app-schedule',
@@ -7,21 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ScheduleComponent implements OnInit {
 
-  constructor() { }
+  constructor(private sps: SchedulePickerService) { }
 
   ngOnInit() {
 
-type MyArrayType = Array<{id: number, text: string}>;
-
-const arr: MyArrayType = [
-    {id: 1, text: 'Sentence 1'},
-    {id: 2, text: 'Sentence 2'},
-    {id: 3, text: 'Sentence 3'},
-    {id: 4, text: 'Sentenc4 '},
-];
   }
-
-
-
-
 }
+

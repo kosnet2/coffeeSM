@@ -1,13 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {SettingsComponent} from './settings/settings.component';
-import {ScheduleComponent} from './schedule/schedule.component';
-import {ReportsComponent} from './reports/reports.component';
+import { SettingsComponent} from './settings/settings.component';
+import { ScheduleComponent} from './schedule/schedule.component';
+import { ReportsComponent} from './reports/reports.component';
+import { AddUserComponent } from './settings/add-user/add-user.component';
+import { EditUsersComponent } from './settings/edit-users/edit-users.component';
 
 const routes: Routes = [
     {
         path: 'settings',
-        component : SettingsComponent
+        component : SettingsComponent,
+        children: [
+            { path: 'addUser' , component: AddUserComponent},
+            { path: 'editUsers', component: EditUsersComponent }
+        ]
     },
     {
         path: 'schedule',

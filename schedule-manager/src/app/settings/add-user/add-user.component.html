@@ -1,0 +1,170 @@
+<mat-card fxLayout="row" fxLayoutAlign="center center">
+  <div fxLayout="column">
+    <mat-card-header>
+      <mat-card-title *ngIf="modalMode === false">Add a new user</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" novalidate>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Name</mat-label>
+            <input 
+              matInput  
+              #nameInput
+              placeholder="Name" 
+              formControlName="name" 
+              required>
+            <mat-error *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)">
+                This field is required
+            </mat-error>
+          </mat-form-field>
+          <br>
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Surname</mat-label>
+            <input 
+              matInput  
+              placeholder="Surname" 
+              formControlName="surname" 
+              required>
+            <mat-error *ngIf="form.controls['surname'].invalid && (form.controls['surname'].dirty || form.controls['surname'].touched)">
+              This field is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <br>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Alias</mat-label>
+            <input 
+              matInput  
+              placeholder="Alias" 
+              formControlName="alias">
+          </mat-form-field>
+          <br>
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Age</mat-label>
+            <input 
+              appNumbersOnly 
+              type="number" 
+              matInput  
+              placeholder="Age" 
+              formControlName="age">
+          </mat-form-field>
+        </div>
+        <br>
+        <div fxLayout="row">
+          <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+            <mat-label>Priviledge</mat-label>
+            <mat-select 
+              placeholder="Select a priviledge" 
+              formControlName="priviledge" 
+              required>
+              <mat-option *ngFor="let p of priviledges" [value] = "p">
+                {{p}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['priviledge'].invalid && (form.controls['priviledge'].dirty || form.controls['priviledge'].touched)">
+              Please choose a priviledge
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <br>
+        <div fxLayout="row" fxLayoutAlign="space-between">
+        <mat-form-field fxLayout="column" fxFlex="47%" appearance ="outline">
+          <mat-label>Email</mat-label>
+          <input 
+            type="email"
+            matInput  
+            placeholder="Email" 
+            formControlName="email" 
+            required>
+          <mat-error *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)">
+            Please enter a valid email address
+          </mat-error>
+        </mat-form-field>
+        <br>
+        <mat-form-field  fxLayout="column" fxFlex="47%" appearance ="outline">
+          <mat-label>Password</mat-label>
+          <input 
+            type="text" 
+            #passwordInput
+            matInput  
+            placeholder="Password" 
+            formControlName="password" 
+            required>
+          <button (click)="generatePassword()" matSuffix mat-flat-button>
+            <mat-icon>autorenew</mat-icon>
+          </button>
+          <mat-error *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)">
+            Please enter a longer password
+          </mat-error>
+        </mat-form-field>
+      </div>
+        <br>
+        <mat-radio-group formControlName="rate" required>
+          <mat-label>Rate</mat-label>
+          <br><br>
+          <mat-radio-button #hourly (click)="fixedInput.value=''" value = "hourly">
+              <mat-form-field appearance ="outline">
+                <mat-label>Hourly</mat-label>
+                <input 
+                  appNumbersOnly 
+                  type="number" 
+                  matInput 
+                  placeholder="Hourly rate" 
+                  [disabled]="!hourly['checked']" 
+                  #hourlyInput 
+                  required>
+              </mat-form-field>
+            </mat-radio-button>
+          <br><br>
+          <mat-radio-button #fixed (click)="hourlyInput.value=''" value = "fixed" >
+            <mat-form-field appearance ="outline">
+              <mat-label>Fixed</mat-label>
+              <input 
+                appNumbersOnly 
+                type="number" 
+                matInput  
+                placeholder="Fixed rate"
+                #fixedInput
+                [disabled]="!fixed['checked']" 
+                required>
+            </mat-form-field>
+          </mat-radio-button>
+          <br><br>
+          <mat-radio-button 
+            #unpaid 
+            (click)="fixedInput.value = ''; hourlyInput.value=''" 
+            value="unpaid">Unpaid
+          </mat-radio-button>
+        </mat-radio-group>
+      </form>
+    </mat-card-content>
+    <mat-card-actions>
+      <!-- Displayed only when the we are NOT IN modal mode -->
+      <button 
+        *ngIf="modalMode === false" 
+        (click)="onAddUser()" 
+        type="submit" 
+        [disabled]="form.pristine || 
+                    form.invalid ||
+                    hourly['checked'] && hourlyInput.value === '' ||
+                    fixed['checked'] && fixedInput.value === ''" 
+        mat-raised-button 
+        color="primary">Add user
+      </button>
+      <!-- Displayed only when the we are IN modal mode -->
+      <button 
+        *ngIf="modalMode === true" 
+        (click)="onUpdateUser()" 
+        type="submit" 
+        [disabled]="form.pristine || 
+                    form.invalid ||
+                    hourly['checked'] && hourlyInput.value === '' ||
+                    fixed['checked'] && fixedInput.value === ''" 
+        mat-raised-button 
+        color="primary">Edit user
+      </button>
+    </mat-card-actions>
+  </div>
+</mat-card>
