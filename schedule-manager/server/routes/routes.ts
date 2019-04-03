@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import User from '../controllers/users';
 import Schedule from '../controllers/schedules';
+import Positions from '../controllers/positions';
 
 
 class Routes {
@@ -27,6 +28,15 @@ class Routes {
         router.put('/', Schedule.updateSchedule);
         return router;
     }
+
+   
+    
+     positions(): Router {
+        const router = Router();
+        router.get('/', Positions.getPositions);        // get positions
+        router.put('/', Positions.updatePositions);     // update positions
+        return router;
+        }
 
 }
 

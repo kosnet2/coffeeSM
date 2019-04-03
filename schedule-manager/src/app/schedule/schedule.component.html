@@ -1,16 +1,162 @@
 
+<!-- Week picker -->
 <mat-card fxLayout="row" fxLayoutAlign="space-between">
-		<!-- Renders Employee list component -->
-    <div fxLayout="column" fxFlex="15%" appearance ="outline">
-		<app-employee-lister></app-employee-lister>  
-	</div>
-		<!-- Renders Employee info component -->
-	<div fxLayout="column" fxFlex="15%" appearance ="outline">
-			<app-employee-info ></app-employee-info>
-	</div>
+	<div fxLayout="column" fxFlex="25%"></div>   <!-- Pushes the buttons into the middle-->
+	<mat-card fxLayout="column" fxFlex="20%" appearance ="outline">
+		Week picker comes here
+	</mat-card>
 
-	  	<!-- Renders Schedule-viewer component -->
-	<div fxLayout="column" fxFlex="65%" appearance ="outline">
-		<app-schedule-viewer ></app-schedule-viewer>
+<!-- Save changes button -->
+	<mat-card fxLayout="column" fxFlex="20%" appearance ="outline">
+		<button mat-raised-button>
+			Save Changes
+			<mat-icon>  done </mat-icon>
+		</button>
+	</mat-card>
+	<div fxLayout="column" fxFlex="25%"></div>	<!-- Pushes the buttons into the middle-->
+</mat-card>
+
+<!-- Week browser -->
+<mat-card fxLayout="row" fxLayoutAlign="space-between">
+	<mat-card fxLayout="column" fxFlex="70%" appearance ="outline">
+		<mat-tab-group>
+			<mat-tab label="Monday">
+				<div fxLayout="row" fxLayoutAlign="space-between">
+					<div fxLayout="column" fxFlex="100%" appearance ="outline">
+						<mat-grid-list cols="7" rowHeight="1:6" gutterSize="2">
+							<mat-grid-tile>
+								<mat-grid-tile-header>Time</mat-grid-tile-header>
+									 <mat-list>
+										 <mat-list-item *ngFor="let time of times; last as last">
+										 	<small> {{time}} </small>
+											 <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+									 	</mat-list-item>
+									 </mat-list>  
+									
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Bar1</mat-grid-tile-header>
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Bar2</mat-grid-tile-header>
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Bar3</mat-grid-tile-header>
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Cashier</mat-grid-tile-header>
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
+							</mat-grid-tile>
+							<mat-grid-tile>
+									<mat-grid-tile-header>Random position</mat-grid-tile-header>
+							</mat-grid-tile>
+					 	</mat-grid-list>
+					</div>
+				</div>	
+			</mat-tab>
+			<mat-tab label="Tuesday">
+				<div fxLayout="row" fxLayoutAlign="space-between">
+					<div fxLayout="column" fxFlex="100%" appearance ="outline">
+						<mat-grid-list cols="7" rowHeight="1:4">
+							<mat-grid-tile>
+								<mat-grid-tile-header>Time</mat-grid-tile-header>
+									<ul>
+										<li *ngFor="let time of times">
+											{{ time }}
+										</li>
+									</ul>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Bar1</mat-grid-tile-header>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Bar2</mat-grid-tile-header>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Bar3</mat-grid-tile-header>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Cashier</mat-grid-tile-header>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
+								</mat-grid-tile>
+								<mat-grid-tile>
+									<mat-grid-tile-header>Random position</mat-grid-tile-header>
+								</mat-grid-tile>
+								 </mat-grid-list>
+							</div>
+						</div>	
+			</mat-tab>
+			<mat-tab label="Wednesday">
+					<div fxLayout="row" fxLayoutAlign="space-between">
+							<div fxLayout="column" fxFlex="100%" appearance ="outline">
+								<mat-grid-list cols="7" rowHeight="1:4">
+									<mat-grid-tile>
+										<mat-grid-tile-header>Time</mat-grid-tile-header>
+										<ul>
+											<li *ngFor="let time of times">
+												{{ time }}
+											</li>
+										</ul>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Bar1</mat-grid-tile-header>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Bar2</mat-grid-tile-header>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Bar3</mat-grid-tile-header>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Cashier</mat-grid-tile-header>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
+									</mat-grid-tile>
+									<mat-grid-tile>
+											<mat-grid-tile-header>Random position</mat-grid-tile-header>
+									</mat-grid-tile>
+								 </mat-grid-list>
+							</div>
+						</div>	
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+
+<!-- Show employees component -->
+	<div fxLayout="column" fxFlex="29%" appearance ="outline">
+		<mat-card appearance ="outline">
+			<mat-card-content>
+				This will need to have a sorting selection!
+				<mat-accordion>
+					<mat-expansion-panel *ngFor="let user of users; let i = index"
+										(opened)="panelOpenState = true"
+                       					(closed)="panelOpenState = false">
+   						 <mat-expansion-panel-header>
+      						 <mat-panel-title>
+								 {{user.name  | titlecase}}
+      						 </mat-panel-title>
+      						 <mat-panel-description>
+        						 Edit working hours
+							 </mat-panel-description>
+   						 </mat-expansion-panel-header>
+						 <mat-form-field>
+							 <input matInput placeholder="Here should be the edit hours">
+						 </mat-form-field>		  
+						 <mat-form-field>
+							 <input matInput placeholder="Here should be the edit hours">
+						 </mat-form-field>
+ 					 </mat-expansion-panel>
+				 </mat-accordion>
+
+					<!--	<button mat-button (click)="onUserClicked(i)">{{user.name + ' ' + user.alias | titlecase}}</button> -->
+			
+			</mat-card-content>
+		</mat-card>
 	</div>
 </mat-card>
+

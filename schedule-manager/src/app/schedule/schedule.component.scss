@@ -2,4 +2,8 @@ mat-grid-tile {
           background: lightblue;
         }
 
-        
+
+.mat-radio-button ~ .mat-radio-button {
+   margin-left: 5%;
+   margin-bottom: 5%;
+ }

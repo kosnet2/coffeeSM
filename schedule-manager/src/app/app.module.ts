@@ -55,7 +55,6 @@ import { EmployeeInfoComponent } from './schedule/employee-info/employee-info.co
 import { ScheduleService } from './services/schedule.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatDrpModule } from 'ngx-mat-daterange-picker';
-import { from } from 'rxjs';
 
 @NgModule({
     declarations: [
