@@ -13,10 +13,10 @@ import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import * as mongoose from 'mongoose';
 import Routes from './routes/routes';
-import config from './config';
+import config from './config/config';
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.dbUrl, { useNewUrlParser: true})
+mongoose.connect(config.dbUrl, { useNewUrlParser: true, useCreateIndex: true })
     .then(() => {
         console.log('Database is connected');
     }, err => {

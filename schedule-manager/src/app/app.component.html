@@ -2,5 +2,6 @@
     <li><button (click)= "onNavigate('/schedule')"><a routerLink="schedule"></a>Schedule</button></li>
     <li><button (click)= "onNavigate('/settings')"><a routerLink="settings"></a>Settings</button></li>
     <li><button (click)= "onNavigate('/reports')"><a routerLink="reports"></a>Reports</button></li>
+    <li *ngIf="isLoggedIn()"><button (click)= "logout()"><a routerLink="reports"></a>Logout</button></li>
 </ul>
 <router-outlet></router-outlet>

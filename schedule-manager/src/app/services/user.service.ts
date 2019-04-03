@@ -29,4 +29,9 @@ export class UserService {
   updateUser(updatedUser): Observable<any> {
     return this.http.put(`${environment.serverUrl}/users`, updatedUser);
   }
+
+  /* Make http call to update user unavailability */
+  updateUserUnavailability(updatedUser): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/users/unavailability`, updatedUser);
+  }
 }

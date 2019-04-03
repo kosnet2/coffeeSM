@@ -1,10 +1,11 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
-import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig, MatSnackBar } from '@angular/material';
 import { COMMA, ENTER} from '@angular/cdk/keycodes';
 import { MatChipInputEvent} from '@angular/material';
 import { PresetItem, NgxDrpOptions, Range} from 'ngx-mat-daterange-picker';
+import { AuthService } from 'src/app/services/auth.service';
 
 /*
 * DELETE USER DIALOG COMPONENT
@@ -200,25 +201,38 @@ export class EditUnavailabilityDialogComponent implements OnInit {
 })
 export class EditUsersComponent implements OnInit {
   users: User[] = [];
+  userPriviledge: string;
   step = -1;
-  displayableUserProperties = ['name', 'surname', 'email', 'password', 'alias', 'priviledge', 'position', 'rate', 'amount', 'age'];
+  displayableUserProperties = ['name', 'surname', 'email', 'alias', 'priviledge', 'position', 'rate', 'amount', 'age'];
 
-  constructor(private us: UserService, public dialog: MatDialog) { }
+  constructor(
+    private us: UserService,
+    public dialog: MatDialog,
+    private auth: AuthService,
+    private snackBar: MatSnackBar) { }
 
   ngOnInit() { this.getUsers(); }
 
   /* Fetch users from db and sort them by priviledge */
   getUsers() {
-    this.us.getUsers().subscribe(res => {
-      for (const r of res) {
-        let user = new User();
-        user = r;
-        this.users.push(user);
-      }
-      this.users.sort((a: User, b: User) => {
-        return a.priviledge === b.priviledge ? 0 : a.priviledge < b.priviledge ? 1 : -1;
+    if (this.auth.isLoggedIn()) {
+      this.auth.loadStorageToken();
+      this.userPriviledge = this.auth.user.priviledge;
+    }
+    if (this.userPriviledge !== 'manager') {
+      this.users.push(this.auth.user);
+    } else {
+      this.us.getUsers().subscribe(res => {
+        for (const r of res) {
+          let user = new User();
+          user = r;
+          this.users.push(user);
+        }
+        this.users.sort((a: User, b: User) => {
+          return a.priviledge === b.priviledge ? 0 : a.priviledge < b.priviledge ? 1 : -1;
+        });
       });
-  });
+    }
   }
 
   /* Sets the step for the accordion. Pass -1 to close any expanded */
@@ -237,6 +251,11 @@ export class EditUsersComponent implements OnInit {
         const user = this.users[index];
         this.us.deleteUser(user['_id']).subscribe( result => {
           if (result.success === true) {
+            this.snackBar.open('The user has been deleted', 'OK', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            });
             this.users.splice(index, 1);
             this.step = -1;
           }
@@ -259,6 +278,11 @@ export class EditUsersComponent implements OnInit {
         // tslint:disable-next-line: forin
         for (const key in res.user) {
           this.users[index][key] = res.user[key];
+          this.snackBar.open('The user has been updated', 'OK', {
+            duration: 5000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+          });
         }
       }
     });
@@ -275,11 +299,16 @@ export class EditUsersComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(res => {
       if (res) {
-        this.us.updateUser(res.user).subscribe(r => {
+        this.us.updateUserUnavailability(res.user).subscribe(r => {
             // tslint:disable-next-line: forin
             for (const key in r.user) {
               this.users[index][key] = r.user[key];
             }
+            this.snackBar.open('The user unavailability has been updated', 'OK', {
+              duration: 5000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+            });
         });
       }
     });
