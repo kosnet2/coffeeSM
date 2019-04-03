@@ -1,0 +1,47 @@
+<mat-accordion class="headers-align">
+  <mat-expansion-panel 
+    *ngFor= "let user of users; let i=index;" 
+    [expanded]="step === i" 
+    (opened)="setStep(i)"
+    >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        {{user['name'] + ' ' + user['surname']| titlecase}}
+      </mat-panel-title>
+      <mat-panel-description>
+        {{user['priviledge'] | titlecase}}
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <h3>User details</h3>
+    <div fxLayout="row" *ngFor="let f of displayableUserProperties" fxLayoutAlign="space-around">
+      <div  fxLayout="column" fxFlex> 
+          {{f | titlecase}}
+      </div>
+      <div  fxLayout="column" fxFlex>
+          <div *ngIf="f !== 'amount'; else amount">
+              {{user[f]}}
+          </div>
+          <ng-template #amount>
+            <div *ngIf="user.rate === 'hourly'">{{user[f]}}&euro;/hour</div>
+            <div *ngIf="user.rate === 'fixed'">{{user[f]}}&euro;/month</div>
+            <div *ngIf="user.rate === 'unpaid'">---</div>
+          </ng-template>
+      </div>
+    </div>
+    <hr fxLayout = "row">
+    <div fxLayout="row">
+        <button fxFlex fxLayout="column" mat-flat-button color="basic" (click)="onEditUser(i)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button fxFlex *ngIf="userPriviledge === 'manager'" fxLayout="column" [disabled]="user.priviledge === 'logistics'"  mat-flat-button color="basic" (click)="onEditUserUnavailability(i)">
+          <mat-icon>schedule</mat-icon>
+        </button>
+        <button fxFlex *ngIf="userPriviledge === 'manager'" fxLayout="column"  mat-flat-button color="basic" (click)="onDeleteUser(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+        <button fxFlex fxLayout="column"  mat-flat-button matSuffix color="basic" (click)="setStep(-1)">
+            <mat-icon>expand_less</mat-icon>
+        </button>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

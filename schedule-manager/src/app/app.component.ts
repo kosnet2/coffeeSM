@@ -7,6 +7,7 @@ import {
         NavigationError,
         NavigationEnd,
       } from '@angular/router';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,17 @@ import {
 export class AppComponent {
   title = 'Coffeeology Schedule Manager';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private auth: AuthService) { }
 
   onNavigate(url) {
     this.router.navigate([url]);
+  }
+
+  isLoggedIn(): boolean {
+    return this.auth.isLoggedIn();
+  }
+
+  logout(): void {
+    this.auth.logout();
   }
 }

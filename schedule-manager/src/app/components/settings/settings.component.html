@@ -1,0 +1,18 @@
+
+<mat-card>
+    <mat-card-content fxLayout ="row" fxLayoutAlign="space-evenly">
+        <button mat-button color="primary" fxLayout="column" routerLink="../settings/editUsers">
+            <mat-icon>edit</mat-icon>
+            {{ userPriviledge === 'manager' ? 'Edit users' : 'My data' }} 
+        </button>
+        <button *ngIf="userPriviledge === 'manager'" mat-button color="primary" fxLayout="column" routerLink="../settings/addUser">
+            <mat-icon>add</mat-icon>
+            Add user
+        </button>
+        <button *ngIf="userPriviledge === 'manager'" mat-button color="primary" fxLayout="column" routerLink="../settings/editPositions">
+            <mat-icon>adjust</mat-icon>
+            Edit positions
+        </button>
+    </mat-card-content>
+</mat-card>
+<router-outlet></router-outlet>

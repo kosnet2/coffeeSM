@@ -1,14 +1,20 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SettingsComponent} from './settings/settings.component';
-import { ScheduleComponent} from './schedule/schedule.component';
-import { ReportsComponent} from './reports/reports.component';
-import { AddUserComponent } from './settings/add-user/add-user.component';
-import { EditUsersComponent } from './settings/edit-users/edit-users.component';
-import { EditPositionsComponent } from './settings/edit-positions/edit-positions.component';
+import { SettingsComponent} from './components/settings/settings.component';
+import { ScheduleComponent} from './components/schedule/schedule.component';
+import { ReportsComponent} from './components/reports/reports.component';
+import { AddUserComponent } from './components/settings/add-user/add-user.component';
+import { EditUsersComponent } from './components/settings/edit-users/edit-users.component';
+import { EditPositionsComponent } from './components/settings/edit-positions/edit-positions.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthGuard } from './services/auth.guard';
 
 /* The routers of the application */
 const routes: Routes = [
+    {
+        path: 'login',
+        component: LoginComponent
+    },
     {
         path: 'settings',
         component : SettingsComponent,
@@ -16,15 +22,28 @@ const routes: Routes = [
             { path: 'addUser' , component: AddUserComponent } ,
             { path: 'editUsers', component: EditUsersComponent },
             { path: 'editPositions', component: EditPositionsComponent }
+        ],
+        canActivate: [
+            AuthGuard
         ]
     },
     {
         path: 'schedule',
-        component : ScheduleComponent
+        component : ScheduleComponent,
+        canActivate: [
+            AuthGuard
+        ]
     },
     {
         path: 'reports',
-        component: ReportsComponent
+        component: ReportsComponent,
+        canActivate: [
+            AuthGuard
+        ]
+    },
+    {
+        path: '**', // redirect to schedule, we could also have a 404 page not found here
+        redirectTo: 'schedule'
     }
 ];
 

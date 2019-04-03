@@ -1,0 +1,35 @@
+<div id="login" fxLayout="column">
+  <div id="login-form-wrapper" fxLayout="column" fxLayoutAlign="center center">
+      <div id="login-form">
+          <div class="title">Login</div>
+          <form name="loginForm" [formGroup]="loginForm" novalidate>
+
+              <mat-form-field>
+                  <input matInput placeholder="Email" formControlName="email">
+                  <mat-error *ngIf="loginForm.get('email').hasError('required')">
+                      Email is required
+                  </mat-error>
+              </mat-form-field>
+
+              <mat-form-field>
+                  <input matInput type="password" placeholder="Password" formControlName="password">
+                  <mat-error>
+                      Password is required
+                  </mat-error>
+              </mat-form-field>
+
+              <div class="remember" fxLayout="row" fxLayoutAlign="space-between center">
+                  <mat-checkbox [(ngModel)]="rememberMe" [ngModelOptions]="{standalone: true}" class="remember-me"
+                      aria-label="Remember Me">
+                      Remember me(UNSTABLE VERSION)
+                  </mat-checkbox>
+              </div>
+
+              <button mat-raised-button color="primary" class="submit-button" aria-label="LOG IN" [disabled]="loginForm.invalid"
+                  (click)="login()">
+                  LOGIN
+              </button>
+          </form>
+      </div>
+  </div>
+</div>

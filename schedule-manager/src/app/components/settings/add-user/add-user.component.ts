@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-add-user',
@@ -29,8 +31,14 @@ export class AddUserComponent implements OnInit {
   priviledges = ['staff', 'manager', 'logistics'];
   rates = ['hourly', 'fixed', 'unpaid'];
   positions = ['bar', 'cleaners', 'kitchen'];
+  userPriviledge: string;
 
-  constructor(private fb: FormBuilder, private us: UserService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private us: UserService,
+    private router: Router,
+    private auth: AuthService,
+    private snackBar: MatSnackBar) {
     this.createForm();
   }
 
@@ -42,6 +50,10 @@ export class AddUserComponent implements OnInit {
   * passed as input to this component.
   */
   ngOnInit() {
+    if (this.auth.isLoggedIn()) {
+      this.auth.loadStorageToken();
+      this.userPriviledge = this.auth.user.priviledge;
+    }
     this.nameInput.nativeElement.focus();
     // Specific functionality to display values in the modal form
     if (this.modalMode === true && this.userData) {
@@ -49,6 +61,12 @@ export class AddUserComponent implements OnInit {
       // tslint:disable-next-line: forin
       for (const key in this.form.controls) {
         this.form.controls[key].setValue(this.userData[key]);
+        if (key !== 'email' && key !== 'password' && this.userPriviledge !== 'manager') {
+          this.form.controls[key].disable();
+        }
+        if (key === 'password') {
+          this.form.controls[key].setValue('');
+        }
       }
 
       // mark the form as modified to pass validation and
@@ -119,10 +137,18 @@ export class AddUserComponent implements OnInit {
 
     this.us.addUser(user).subscribe(res => {
       if (res) {
-        console.log('User succesfully added');
+        this.snackBar.open('User successfully added', 'OK', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
         this.router.navigateByUrl('/settings/editUsers');
       } else {
-        console.log('User was not added!');
+        this.snackBar.open('User was not added', 'OK', {
+          duration: 5000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+        });
       }
     });
   }
