@@ -3,7 +3,11 @@
 <mat-card fxLayout="row" fxLayoutAlign="space-between">
 	<div fxLayout="column" fxFlex="25%"></div>   <!-- Pushes the buttons into the middle-->
 	<mat-card fxLayout="column" fxFlex="20%" appearance ="outline">
-		Week picker comes here
+		<mat-form-field>
+			<input matInput [matDatepicker]="picker" placeholder="Choose a date" [value]="startDate.value" (dateInput)= "onChangeDate($event)" >
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker [startAt]="endDate"></mat-datepicker>
+		  </mat-form-field>
 	</mat-card>
 
 <!-- Save changes button -->
@@ -17,46 +21,38 @@
 </mat-card>
 
 <!-- Week browser -->
-<mat-card fxLayout="row" fxLayoutAlign="space-between">
-	<mat-card fxLayout="column" fxFlex="70%" appearance ="outline">
+<mat-card>
+<!-- <mat-card fxLayout="row" fxLayoutAlign="space-between"> -->
+	<!-- <mat-card > -->
+	 <mat-card fxLayout="column" fxFlex="70%" appearance ="outline"> 
 		<mat-tab-group>
-			<mat-tab label="Monday">
-				<div fxLayout="row" fxLayoutAlign="space-between">
-					<div fxLayout="column" fxFlex="100%" appearance ="outline">
-						<mat-grid-list cols="7" rowHeight="1:6" gutterSize="2">
-							<mat-grid-tile>
-								<mat-grid-tile-header>Time</mat-grid-tile-header>
-									 <mat-list>
-										 <mat-list-item *ngFor="let time of times; last as last">
-										 	<small> {{time}} </small>
-											 <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-									 	</mat-list-item>
-									 </mat-list>  
-									
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Bar1</mat-grid-tile-header>
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Bar2</mat-grid-tile-header>
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Bar3</mat-grid-tile-header>
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Cashier</mat-grid-tile-header>
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
-							</mat-grid-tile>
-							<mat-grid-tile>
-									<mat-grid-tile-header>Random position</mat-grid-tile-header>
-							</mat-grid-tile>
-					 	</mat-grid-list>
+
+			<!-- Tabs containing days of week	-->
+			<mat-tab *ngFor="let day of days;let i=index"  [label]=" day" >
+				<div fxLayout="row" fxLayoutAlign="space-between" >
+					<!-- Time title-row -->
+					<div fxLayout="column" class="grid-element" fxFlex="0 1 70">
+						<h3>Time</h3>
+					</div>
+					<!-- Positions title-row-->
+					<div fxLayout="column" *ngFor="let position of currentPositions" fxFlex="0 1 70"class="grid-element">
+						<h3>{{position}}</h3>
+					</div>
+				</div>
+				<!-- Time Column -->
+				<div fxLayout="row" *ngFor="let time of times; let timeIndex=index" fxLayoutAlign="space-between">
+					<div fxLayout="column"  appearance ="outline" class="grid-element" fxFlex="0 1 70">
+						{{time  |  date:'HH:mm' }} 
+					</div>
+						
+					<!-- Position data columns-->
+					<div fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index" 
+					class="grid-element" fxFlex="0 1 70" (click)="openDialog(timeIndex, positionIndex)" >
+						<div   > - </div>  <!-- (click)="debug(timeIndex, positionIndex)" -->
 					</div>
 				</div>	
 			</mat-tab>
-			<mat-tab label="Tuesday">
+			<!-- <mat-tab label="Tuesday">
 				<div fxLayout="row" fxLayoutAlign="space-between">
 					<div fxLayout="column" fxFlex="100%" appearance ="outline">
 						<mat-grid-list cols="7" rowHeight="1:4">
@@ -123,27 +119,27 @@
 								 </mat-grid-list>
 							</div>
 						</div>	
-			</mat-tab>
+			</mat-tab> -->
 		</mat-tab-group>
 	</mat-card>
 
 <!-- Show employees component -->
 	<div fxLayout="column" fxFlex="29%" appearance ="outline">
-		<mat-card appearance ="outline">
+		<mat-card appearance ="outline" fxLayout="column" fxFlex="29%" appearance ="outline">
 			<mat-card-content>
 				This will need to have a sorting selection!
 				<mat-accordion>
 					<mat-expansion-panel *ngFor="let user of users; let i = index"
 										(opened)="panelOpenState = true"
-                       					(closed)="panelOpenState = false">
-   						 <mat-expansion-panel-header>
-      						 <mat-panel-title>
+							  			(closed)="panelOpenState = false">
+							 <mat-expansion-panel-header>
+								 <mat-panel-title>
 								 {{user.name  | titlecase}}
-      						 </mat-panel-title>
-      						 <mat-panel-description>
-        						 Edit working hours
+								 </mat-panel-title>
+								 <mat-panel-description>
+		  						 Edit working hours
 							 </mat-panel-description>
-   						 </mat-expansion-panel-header>
+							 </mat-expansion-panel-header>
 						 <mat-form-field>
 							 <input matInput placeholder="Here should be the edit hours">
 						 </mat-form-field>		  

@@ -13,19 +13,58 @@ class Schedules {
         }).catch( err => {
 	  return res.status(400).json({ message: 'Database error: Could not add schedule', error: err });
         });
-    }
+	}
+	
+	addSchedules(req, res){
+		const schedulesDoc = req.body;
+		scheduleModel.insertMany(schedulesDoc).then((response: any) => {
+			return res.json({ schedule: response, message: 'Schedule successfully added'});
+			  }).catch( err => {
+			return res.status(400).json({ message: 'Database error: Could not add schedule', error: err });
+			  });
+	}
 
-    getSchedules(req, res) {
-        scheduleModel.find().then((schedules: any) => {
-	  return res.json(schedules);
+    // getSchedules(req, res) {
+	// 	// const start = req.params.start;
+	// 	// const end = req.params.end;
+	// 	//TODO: find how to do a find() with if for mongo
 
-        }).catch(err => {
-	  return res.status(400).json({
-	      message: 'Database error: Could not get schedule',
-	      error: err
-	  });
-        });
-    }
+	// 	// find something between start and end
+
+	// 	// In mongo DO:
+	// 	// add documents to mongodb with todays date and previous weeks date
+	// 	// test by quering only for this week
+
+    //     scheduleModel.find().then((schedules: any) => {
+	//   return res.json(schedules);
+
+    //     }).catch(err => {
+	//   return res.status(400).json({
+	//       message: 'Database error: Could not get schedule',
+	//       error: err
+	//   });
+    //     });
+	// }
+
+	
+	// Gets the schedule entries based on the date range provided
+	getScheduleRange(req, res){
+		const range = JSON.parse(req.params.range);
+		const start = new Date(range.start);
+		const end = new Date(range.end);
+
+		scheduleModel.find({'dateTime' :{$gt: new Date(range.start), $lt: new Date(range.end) }}).then((schedules: any) => {
+			return res.json(schedules);
+	  
+			  }).catch(err => {
+			return res.status(400).json({
+				message: 'Database error: Could not get schedule',
+				error: err
+			});
+		 });
+	}
+
+
 
     deleteSchedule(req, res) {
         const id = req.params.id;

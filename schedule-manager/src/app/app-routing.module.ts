@@ -24,15 +24,15 @@ const routes: Routes = [
             { path: 'editPositions', component: EditPositionsComponent }
         ],
         canActivate: [
-            AuthGuard
+           AuthGuard
         ]
     },
     {
         path: 'schedule',
         component : ScheduleComponent,
-        canActivate: [
-            AuthGuard
-        ]
+        // canActivate: [
+        //     AuthGuard
+        // ]
     },
     {
         path: 'reports',

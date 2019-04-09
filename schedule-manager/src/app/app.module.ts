@@ -19,7 +19,7 @@ import { EditUsersComponent,
          EditUnavailabilityDialogComponent } from './components/settings/edit-users/edit-users.component';
 import { AppComponent } from './app.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { ScheduleComponent } from './components/schedule/schedule.component';
+import { ScheduleComponent, ScheduleInputDialog } from './components/schedule/schedule.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { LoginComponent } from './components/login/login.component';
 
@@ -62,6 +62,7 @@ import { AuthErrorHandler } from './services/auth-error-handler';
         AppComponent,
         SettingsComponent,
         ScheduleComponent,
+        ScheduleInputDialog,
         ReportsComponent,
         AddUserComponent,
         EditUsersComponent,
@@ -121,6 +122,6 @@ import { AuthErrorHandler } from './services/auth-error-handler';
             }],
     bootstrap: [AppComponent],
     // the dialog components need to be declared here
-    entryComponents: [DeleteDialogComponent, EditDialogComponent, EditUnavailabilityDialogComponent]
+    entryComponents: [DeleteDialogComponent, EditDialogComponent, EditUnavailabilityDialogComponent, ScheduleInputDialog]
 })
 export class AppModule { }

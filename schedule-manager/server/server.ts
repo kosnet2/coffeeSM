@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use('/users', Routes.activate().users());           // activate /users server path
 app.use('/positions', Routes.activate().positions());   // activate /positions server path
-app.use('/schedule', Routes.activate().schedules());
+app.use('/schedules', Routes.activate().schedules());
 const port = process.env.PORT || 3000;
 
 const server = app.listen(port, () => {

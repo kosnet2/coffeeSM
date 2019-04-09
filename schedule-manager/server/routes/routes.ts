@@ -42,13 +42,13 @@ class Routes {
     // defines /users routes
     schedules(): Router {
         const router = Router();
-        router.post('/', Schedule.addSchedule);             // add a schedule on this route
-        router.get('/', Schedule.getSchedules);             // get schedules through this route
-        router.delete('/:id', Schedule.deleteSchedule);
-        router.put('/', Schedule.updateSchedule);
-        router.delete('/:id', User.deleteUser);     // delete specified user
-        router.put('/', User.updateUser);           // update users
-        router.put('/unavailability', User.updateUserUnavailability); // Update unavailability
+        router.post('/', Schedule.addSchedules);             // will call insertMany function
+        router.get('/:range', Schedule.getScheduleRange);             // get schedules through this route
+        // router.delete('/:id', Schedule.deleteSchedule);
+        // router.put('/', Schedule.updateSchedule);
+        // router.delete('/:id', User.deleteUser);     // delete specified user
+        // router.put('/', User.updateUser);           // update users
+        // router.put('/unavailability', User.updateUserUnavailability); // Update unavailability
         return router;
     }
 

@@ -50,21 +50,21 @@ export class AddUserComponent implements OnInit {
   * passed as input to this component.
   */
   ngOnInit() {
-    if (this.auth.isLoggedIn()) {
-      this.auth.loadStorageToken();
-      this.userPriviledge = this.auth.user.priviledge;
+    if (this.auth.isLoggedIn()) {     // If someone is logging in
+      this.auth.loadStorageToken();   // Get a token for him
+      this.userPriviledge = this.auth.user.priviledge;    // Users priviledge is passed onto local variable
     }
-    this.nameInput.nativeElement.focus();
+    this.nameInput.nativeElement.focus();     // Cursor is placed onto nameInput field
     // Specific functionality to display values in the modal form
     if (this.modalMode === true && this.userData) {
 
       // tslint:disable-next-line: forin
-      for (const key in this.form.controls) {
-        this.form.controls[key].setValue(this.userData[key]);
-        if (key !== 'email' && key !== 'password' && this.userPriviledge !== 'manager') {
-          this.form.controls[key].disable();
+      for (const key in this.form.controls) {                   // Looping through form control fields´ key values
+        this.form.controls[key].setValue(this.userData[key]);   // Imported user data´s current key´s value is passed into the current form
+        if (key !== 'email' && key !== 'password' && this.userPriviledge !== 'manager') {  
+          this.form.controls[key].disable();  // If they person trying to log in is not manager, disable the form control
         }
-        if (key === 'password') {
+        if (key === 'password') {    // If key equals to password, set all fields as empty string
           this.form.controls[key].setValue('');
         }
       }
@@ -127,24 +127,24 @@ export class AddUserComponent implements OnInit {
   *      to set up his password.
   */
   onAddUser() {
-    const newUser = this.form.value;
-    const user = new User();
+    const newUser = this.form.value;    // All key value pairs from form are passed into local variable
+    const user = new User();            // Local user object is created
 
     // tslint:disable-next-line: forin
-    for (const key in newUser) {
-      user[key] = newUser[key];
+    for (const key in newUser) {    // Looping through all key value pairs
+      user[key] = newUser[key];     // All form´s values are passed into a local object
     }
 
-    this.us.addUser(user).subscribe(res => {
+    this.us.addUser(user).subscribe(res => {    // The created user object is passed passed onto a function that will put it into the DB
       if (res) {
         this.snackBar.open('User successfully added', 'OK', {
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
         });
-        this.router.navigateByUrl('/settings/editUsers');
+        this.router.navigateByUrl('/settings/editUsers');   // If adding user to DB is successfull, rerouting takes place
       } else {
-        this.snackBar.open('User was not added', 'OK', {
+        this.snackBar.open('User was not added', 'OK', {    // Else a error message is shown
           duration: 5000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -163,12 +163,12 @@ export class AddUserComponent implements OnInit {
   * the specific user that is being editted on the frontend.
   */
   onUpdateUser() {
-    const updatedUser = {...this.form.value};
-    updatedUser['_id'] = this.userData['_id'];
+    const updatedUser = {...this.form.value};   // A copy of the values of the form is passed into a local variable
+    updatedUser['_id'] = this.userData['_id'];  // A userID is passed onto a local variable
 
-    this.us.updateUser(updatedUser).subscribe(res => {
+    this.us.updateUser(updatedUser).subscribe(res => {  // A local variable with userID is passed onto a function that will update it in the DB
       if (res.success === true) {
-        this.userUpdated.emit(res.user);
+        this.userUpdated.emit(res.user);  // If successfull, the result is emitted back to the parent component
       }
     });
   }
