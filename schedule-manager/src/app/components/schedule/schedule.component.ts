@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { Positions} from 'src/app/models/positions';
@@ -10,6 +10,7 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 import { ScheduleRange } from 'src/app/models/scheduleRange';
 import { environment } from 'src/environments/environment';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { GridAreaStyleBuilder } from '@angular/flex-layout/grid/typings/area/area';
 
 @Component({
 	selector: 'app-schedule',
@@ -25,6 +26,9 @@ export class ScheduleComponent implements OnInit {
 	users: User[] = [];
 	times: Array<Date>;
 	days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+	formWasRecieved = false;
+
 
 	// __________input dialog variables__________
 	startTime: any;
@@ -103,21 +107,21 @@ export class ScheduleComponent implements OnInit {
 
 	fetchScheduleRange(range: ScheduleRange) {
 		this.ss.getScheduleRange(range).subscribe(res => {		// Call service to query database
-			if (res.length === 0) {
-				this.populateWeek(range.start, range.end, false);
-				this.ss.addSchedules([...this.currentWeek]);
+			if (res.length === 0) {			// If there is nothing on database
+				this.populateWeek(range.start, range.end, false);  	// Don´t populate week
+				this.ss.addSchedules([...this.currentWeek]);		// Call service to add this current week to database as new entries
 			} else {
-				this.populateWeek(range.start, range.end, true);
-				this.currentWeek = res;
-				this.distributeUsers();
+				this.populateWeek(range.start, range.end, true);	// Populate the week
+				this.currentWeek = res;			// Place whatever came with reponse into current week-variable
+				this.distributeUsers();			
 			}
 		});
 	}
 
 	distributeUsers() {
 		// for each datetime returned from db get the users
-		for (let i = 0; i < this.currentWeek.length; i++) {
-			const userList = this.currentWeek[i]['allocatedStaff'];
+		for (let i = 0; i < this.currentWeek.length; i++) {           
+			const userList = this.currentWeek[i]['allocatedStaff'];	  // Loop through datetimes and get the allocated staff from that day
 			if (userList.length !== 0) {
 				for (const userId of userList) {
 				// find the userID in user list and update the grid with his alias
@@ -192,6 +196,7 @@ export class ScheduleComponent implements OnInit {
 
 	onSaveSchedule() {
 		console.log(this.currentWeek);
+		this.loadWeeklySchedule();
 	}
 
 	// Creates time entries for the whole week with 30 minutes intervals
@@ -203,7 +208,7 @@ export class ScheduleComponent implements OnInit {
 		if (!exist) {
 			this.currentWeek = [];
 		}
-		this.currentWeekDom = [];
+		this.currentWeekDom = [];  // An array for current weeks data (days, times, and positions) is created
 		while (s <= e) {						// Loop through all time values
 			if (s.getHours() >= 6 && s.getHours() <= 23) {				// Set the time range between 6-23
 				if (!this.times.find(time => {										// If nothing is found between 6-23
@@ -223,15 +228,16 @@ export class ScheduleComponent implements OnInit {
 			s.setMinutes(s.getMinutes() + 30);		// Will append 30 minutes for creating new entries with 30 min intervals
 		}
 
+
 		// dayIndex
 		for (let i = 0; i < this.days.length; i++) {
-			this.currentWeekDom.push([]);
+			this.currentWeekDom.push([]);				// Pushing the days into an array
 			// timeIndex
 			for (let j = 0; j < this.times.length; j++) {
-				this.currentWeekDom[i].push([]);
+				this.currentWeekDom[i].push([]);		// Pushing the times into an array
 				// positionIndex
 				for (let k = 0; k < this.currentPositions.length; k++) {
-					this.currentWeekDom[i][j].push('');
+					this.currentWeekDom[i][j].push('');		// Pushing the positions into an array
 				}
 			}
 		}
@@ -242,27 +248,27 @@ export class ScheduleComponent implements OnInit {
 	*	 1. It will set the hours, minutes and seconds to zero
 	*  2. It will calculate the first day of week based on given day
 	*/
-		openDialog(dayIndex, timeIndex, positionIndex): void {
-			this.startTime = this.times[timeIndex];     // Getting selected time from grid
+		openDialog(dayIndex, timeIndex, positionIndex): void {		// Take indexes as parameters
+			this.startTime = this.times[timeIndex];     			// Getting selected time from grid
 			// tslint:disable-next-line: no-use-before-declare
-			const dialogRef = this.dialog.open(ScheduleInputDialog, {
+			const dialogRef = this.dialog.open(ScheduleInputDialog, {  // Open the dialog
 				autoFocus: true,
-				data: {
+				data: {												//Data that the dialog has
 					'start' : this.times[timeIndex],
 					'position' : this.currentPositions[positionIndex],
 					'users': this.users,
 				}
 			});
 
-			dialogRef.afterClosed().subscribe(res => {
+			dialogRef.afterClosed().subscribe(res => {			// After dialog is closed
 				if (res) {
 					// update dom element
-					const from  = res['fromTime'];
+					const from  = res['fromTime'];				//Get values from dialog
 					const to = res['toTime'];
 					const user = res['employee'];
 
 					// get proper day to fill
-					const start = new Date(this.startDate.value);
+					const start = new Date(this.startDate.value);		// Creating new date object with startDate´s value
 					start.setDate(start.getDate() + dayIndex);
 					start.setHours(+from.substring(0, 2));
 					start.setMinutes(+from.substring(3));
@@ -289,6 +295,7 @@ export class ScheduleComponent implements OnInit {
 					// update database
 					this.ss.updateSchedule({'from': start , 'to': end, 'userId': user['_id']}).subscribe( r => {
 						console.log(r);
+						this.loadWeeklySchedule();  // Update schedule after person is added to the schedule
 					});
 				}
 			});
@@ -307,6 +314,7 @@ export class ScheduleComponent implements OnInit {
 export class ScheduleInputDialog {
 
 // __________ Variables __________
+	@Output() formWasSubmitted = new EventEmitter();
 	form: FormGroup;
 	employees = [];
 
@@ -317,6 +325,8 @@ constructor(
 		@Inject(MAT_DIALOG_DATA) public data: any) {
 			this.createForm();
 		}
+
+		
 
 	// __________ Functions __________
 	createForm() {
@@ -367,6 +377,8 @@ constructor(
 
 		if (valid) {
 			this.dialogRef.close(this.form.value);
+			this.formWasSubmitted.emit();
+			
 		} else {
 			this.dialogRef.close();
 		}

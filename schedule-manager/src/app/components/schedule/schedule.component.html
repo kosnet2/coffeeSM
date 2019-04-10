@@ -38,15 +38,16 @@
 					</div>
 				</div>
 				<!-- Time Column -->
-				<div fxLayout="row" *ngFor="let time of times; let timeIndex=index" fxLayoutAlign="space-between">
-					<div fxLayout="column"  appearance ="outline" class="grid-element" fxFlex="0 1 70">
+				<div fxLayout="row" *ngFor="let time of times; let timeIndex=index; let even = even" fxLayoutAlign="space-between">
+					<div fxLayout="column"  appearance ="outline" class="grid-element" fxFlex="0 1 70" [class.evenBackgroundColor]=" even ">
 						{{time  |  date:'HH:mm' }} 
 					</div>
 						
 					<!-- Position data columns-->
-					<div fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index" 
-					class="grid-element" fxFlex="0 1 70" (click)="openDialog(dayIndex, timeIndex, positionIndex)" >
-						<div>{{currentWeekDom[dayIndex][timeIndex][positionIndex]}}</div> 
+					<div fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index; "
+					matTooltip="{{time |  date:'HH:mm'}}" 
+					class="grid-element" fxFlex="0 1 70" (click)="openDialog(dayIndex, timeIndex, positionIndex)" [class.evenBackgroundColor]=" even ">
+						<div  >{{currentWeekDom[dayIndex][timeIndex][positionIndex]}}</div> 
 					</div>
 				</div>	
 			</mat-tab>
