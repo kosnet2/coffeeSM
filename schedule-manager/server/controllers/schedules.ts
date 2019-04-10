@@ -14,48 +14,23 @@ class Schedules {
 	  return res.status(400).json({ message: 'Database error: Could not add schedule', error: err });
         });
 	}
-	
-	addSchedules(req, res){
+
+	addSchedules(req, res) {
 		const schedulesDoc = req.body;
 		scheduleModel.insertMany(schedulesDoc).then((response: any) => {
 			return res.json({ schedule: response, message: 'Schedule successfully added'});
-			  }).catch( err => {
+		}).catch( err => {
 			return res.status(400).json({ message: 'Database error: Could not add schedule', error: err });
-			  });
+		});
 	}
 
-    // getSchedules(req, res) {
-	// 	// const start = req.params.start;
-	// 	// const end = req.params.end;
-	// 	//TODO: find how to do a find() with if for mongo
-
-	// 	// find something between start and end
-
-	// 	// In mongo DO:
-	// 	// add documents to mongodb with todays date and previous weeks date
-	// 	// test by quering only for this week
-
-    //     scheduleModel.find().then((schedules: any) => {
-	//   return res.json(schedules);
-
-    //     }).catch(err => {
-	//   return res.status(400).json({
-	//       message: 'Database error: Could not get schedule',
-	//       error: err
-	//   });
-    //     });
-	// }
-
-	
-	// Gets the schedule entries based on the date range provided
-	getScheduleRange(req, res){
+	getScheduleRange(req, res) {
 		const range = JSON.parse(req.params.range);
 		const start = new Date(range.start);
 		const end = new Date(range.end);
 
-		scheduleModel.find({'dateTime' :{$gt: new Date(range.start), $lt: new Date(range.end) }}).then((schedules: any) => {
+		scheduleModel.find({'dateTime' : {$gt: new Date(range.start), $lt: new Date(range.end) }}).then((schedules: any) => {
 			return res.json(schedules);
-	  
 			  }).catch(err => {
 			return res.status(400).json({
 				message: 'Database error: Could not get schedule',
@@ -63,8 +38,6 @@ class Schedules {
 			});
 		 });
 	}
-
-
 
     deleteSchedule(req, res) {
         const id = req.params.id;
@@ -91,16 +64,20 @@ class Schedules {
 
     updateSchedule(req, res) {
         const scheduleDoc = req.body;
+		const from = new Date(req.body.from);
+		const to = new Date(req.body.to);
+		to.setMinutes(to.getMinutes() + 30);	// mongod db lt is not inclusive
+		const userId = req.body.userId;
 
-        scheduleModel.updateOne({_id: scheduleDoc._id }, scheduleDoc).then( response => {
+		scheduleModel.updateMany({'dateTime' : {$gt: from, $lt: to }}, {$addToSet: {'allocatedStaff': userId}}).then( response => {
 	  if (response.n) {
 	      return res.json({
-		success: true,
-		message: response.nModified ? 'Schedule successfully updated' : 'Schedule is the same',
-		schedule: scheduleDoc
+			success: true,
+			message: response.nModified ? 'Schedule successfully updated' : 'Schedule is the same',
+			schedule: scheduleDoc
 	      });
 	  } else {
-	      return res.json({
+	    	return res.json({
 		success: false,
 		message: 'Schedule does not exist'
 	      });

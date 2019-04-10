@@ -17,8 +17,8 @@
 					 </mat-form-field>
 					 <mat-form-field>
 							<mat-label>Employee</mat-label>
-							<mat-select>
-							  <mat-option *ngFor="let employee of employees" [value] = "employee.name">
+							<mat-select formControlName="employee">
+							  <mat-option *ngFor="let employee of employees" [value] = "employee">
 								{{employee.name + ' ' + employee.surname}}
 							  </mat-option>
 							</mat-select>
@@ -40,7 +40,7 @@
 					<div fxLayout="column" fxFlex="48%" appearance ="outline">
 							<button 
 							mat-button 
-							(click)="onNoClick()" 
+							(click)="onYesClick()" 
 							class="material-icons">
 							<i class="material-icons">
 								done
@@ -54,20 +54,18 @@
 	<mat-card fxLayout="column" fxFlex="48%" appearance ="outline">
 			<mat-chip-list class="mat-chip-list-stacked">
 					<!-- <mat-chip *ngFor="let chip of availableColors" selected [color]="chip.color"> -->
-					<mat-chip>
+					<mat-chip (click)="add(1)">
 					  +1h
 					</mat-chip>
-					<mat-chip>
+					<mat-chip (click)="add(2)">
 						+2h
 					</mat-chip>
-					<mat-chip>
-						+3h
-					</mat-chip>
-					 <mat-chip>
+					<mat-chip (click)="add(4)">
 						+4h
 					</mat-chip>
+					 <mat-chip (click)="add(8)">
+						+8h
+					</mat-chip>
 				  </mat-chip-list>
-
-
 	</mat-card>
 </div>

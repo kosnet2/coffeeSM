@@ -11,29 +11,21 @@ import { ScheduleRange } from '../models/scheduleRange';
 
 export class ScheduleService {
 
- constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
- addSchedule(schedule: Schedule): Observable<any> {
-   return this.http.post(`${environment.serverUrl}/schedule`, schedule);  //add to schedule database
- }
+  addSchedule(schedule: Schedule): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/schedule`, schedule);  // add to schedule database
+  }
 
- addSchedules(schedules: Array<any>): Observable<any> {
-  return this.http.post(`${environment.serverUrl}/schedules`, schedules);   
- }
+  addSchedules(schedules: Array<any>): Observable<any> {
+    return this.http.post(`${environment.serverUrl}/schedules`, schedules);
+  }
 
- getScheduleRange(range: ScheduleRange): Observable<any> {
-  return this.http.get(`${environment.serverUrl}/schedules/${JSON.stringify(range)}`);
- }
+  getScheduleRange(range: ScheduleRange): Observable<any> {
+    return this.http.get(`${environment.serverUrl}/schedules/${JSON.stringify(range)}`);
+  }
 
-//  getSchedule(): Observable<any> {
-//    return this.http.get(`${environment.serverUrl}/schedule`);
-//  }
-
-//  deleteSchedule(scheduleId: string): Observable<any> {
-//    return this.http.delete(`${environment.serverUrl}/schedule/${scheduleId}`);
-//  }
-
-//  updateSchedule(updatedSchedule): Observable<any> {
-//    return this.http.put(`${environment.serverUrl}/schedule`, updatedSchedule);
-//  }
+  updateSchedule(userAddedinRange): Observable<any> {
+    return this.http.put(`${environment.serverUrl}/schedules`, userAddedinRange);
+  }
 }

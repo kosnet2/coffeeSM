@@ -15,20 +15,20 @@
       "severity": "warn"
     },
     "eofline": true,
-    "forin": true,
+    "forin": false,
     "import-blacklist": [
       true,
       "rxjs/Rx"
     ],
     "import-spacing": true,
     "indent": [
-      true,
+      false,
       "tabs"
     ],
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": [
-      true,
+      false,
       140
     ],
     "member-access": false,

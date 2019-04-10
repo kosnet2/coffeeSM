@@ -12,7 +12,7 @@
 
 <!-- Save changes button -->
 	<mat-card fxLayout="column" fxFlex="20%" appearance ="outline">
-		<button mat-raised-button>
+		<button mat-raised-button (click)="onSaveSchedule()">
 			Save Changes
 			<mat-icon>  done </mat-icon>
 		</button>
@@ -22,20 +22,18 @@
 
 <!-- Week browser -->
 <mat-card>
-<!-- <mat-card fxLayout="row" fxLayoutAlign="space-between"> -->
-	<!-- <mat-card > -->
 	 <mat-card fxLayout="column" fxFlex="70%" appearance ="outline"> 
 		<mat-tab-group>
 
 			<!-- Tabs containing days of week	-->
-			<mat-tab *ngFor="let day of days;let i=index"  [label]=" day" >
+			<mat-tab *ngFor="let day of days;let dayIndex=index"  [label]=" day" >
 				<div fxLayout="row" fxLayoutAlign="space-between" >
 					<!-- Time title-row -->
 					<div fxLayout="column" class="grid-element" fxFlex="0 1 70">
 						<h3>Time</h3>
 					</div>
 					<!-- Positions title-row-->
-					<div fxLayout="column" *ngFor="let position of currentPositions" fxFlex="0 1 70"class="grid-element">
+					<div fxLayout="column" *ngFor="let position of currentPositions" fxFlex="0 1 70" class="grid-element">
 						<h3>{{position}}</h3>
 					</div>
 				</div>
@@ -47,79 +45,11 @@
 						
 					<!-- Position data columns-->
 					<div fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index" 
-					class="grid-element" fxFlex="0 1 70" (click)="openDialog(timeIndex, positionIndex)" >
-						<div   > - </div>  <!-- (click)="debug(timeIndex, positionIndex)" -->
+					class="grid-element" fxFlex="0 1 70" (click)="openDialog(dayIndex, timeIndex, positionIndex)" >
+						<div>{{currentWeekDom[dayIndex][timeIndex][positionIndex]}}</div> 
 					</div>
 				</div>	
 			</mat-tab>
-			<!-- <mat-tab label="Tuesday">
-				<div fxLayout="row" fxLayoutAlign="space-between">
-					<div fxLayout="column" fxFlex="100%" appearance ="outline">
-						<mat-grid-list cols="7" rowHeight="1:4">
-							<mat-grid-tile>
-								<mat-grid-tile-header>Time</mat-grid-tile-header>
-									<ul>
-										<li *ngFor="let time of times">
-											{{ time }}
-										</li>
-									</ul>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Bar1</mat-grid-tile-header>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Bar2</mat-grid-tile-header>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Bar3</mat-grid-tile-header>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Cashier</mat-grid-tile-header>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
-								</mat-grid-tile>
-								<mat-grid-tile>
-									<mat-grid-tile-header>Random position</mat-grid-tile-header>
-								</mat-grid-tile>
-								 </mat-grid-list>
-							</div>
-						</div>	
-			</mat-tab>
-			<mat-tab label="Wednesday">
-					<div fxLayout="row" fxLayoutAlign="space-between">
-							<div fxLayout="column" fxFlex="100%" appearance ="outline">
-								<mat-grid-list cols="7" rowHeight="1:4">
-									<mat-grid-tile>
-										<mat-grid-tile-header>Time</mat-grid-tile-header>
-										<ul>
-											<li *ngFor="let time of times">
-												{{ time }}
-											</li>
-										</ul>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Bar1</mat-grid-tile-header>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Bar2</mat-grid-tile-header>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Bar3</mat-grid-tile-header>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Cashier</mat-grid-tile-header>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Cleaner</mat-grid-tile-header>
-									</mat-grid-tile>
-									<mat-grid-tile>
-											<mat-grid-tile-header>Random position</mat-grid-tile-header>
-									</mat-grid-tile>
-								 </mat-grid-list>
-							</div>
-						</div>	
-			</mat-tab> -->
 		</mat-tab-group>
 	</mat-card>
 
@@ -148,9 +78,6 @@
 						 </mat-form-field>
  					 </mat-expansion-panel>
 				 </mat-accordion>
-
-					<!--	<button mat-button (click)="onUserClicked(i)">{{user.name + ' ' + user.alias | titlecase}}</button> -->
-			
 			</mat-card-content>
 		</mat-card>
 	</div>

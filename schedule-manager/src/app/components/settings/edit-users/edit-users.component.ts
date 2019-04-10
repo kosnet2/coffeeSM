@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { User } from 'src/app/models/user';
 import { MatDialog, MAT_DIALOG_DATA, MatDialogRef, MatDialogConfig, MatSnackBar } from '@angular/material';

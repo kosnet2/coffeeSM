@@ -43,7 +43,8 @@ class Routes {
     schedules(): Router {
         const router = Router();
         router.post('/', Schedule.addSchedules);             // will call insertMany function
-        router.get('/:range', Schedule.getScheduleRange);             // get schedules through this route
+        router.get('/:range', Schedule.getScheduleRange);    // get schedules through this route
+        router.put('/', Schedule.updateSchedule);
         // router.delete('/:id', Schedule.deleteSchedule);
         // router.put('/', Schedule.updateSchedule);
         // router.delete('/:id', User.deleteUser);     // delete specified user
