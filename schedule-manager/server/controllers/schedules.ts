@@ -65,8 +65,10 @@ class Schedules {
     updateSchedule(req, res) {
         const scheduleDoc = req.body;
 		const from = new Date(req.body.from);
+		from.setMinutes(from.getMinutes() - 30);
 		const to = new Date(req.body.to);
-		to.setMinutes(to.getMinutes() + 30);	// mongod db lt is not inclusive
+		
+		to.setMinutes(to.getMinutes() - 30);	// mongod db lt is not inclusive
 		const userId = req.body.userId;
 
 		scheduleModel.updateMany({'dateTime' : {$gt: from, $lt: to }}, {$addToSet: {'allocatedStaff': userId}}).then( response => {
@@ -88,7 +90,35 @@ class Schedules {
 	      error: err
 	  });
         });
-    }
+	}
+	
+	removeUserFromSchedule(req, res){
+		const scheduleDoc = req.body;
+		const from = new Date(req.body.from);
+		const to = new Date(req.body.to);
+		to.setMinutes(to.getMinutes() + 30);	// mongod db lt is not inclusive
+		const userId = req.body.userId;
+
+		scheduleModel.updateMany({'dateTime' : {$gt: from, $lt: to }}, { $pull: {'allocatedStaff': userId}}).then( response => {
+			if (response.n) {
+				return res.json({
+				success: true,
+				message: response.nModified ? 'Schedule successfully updated' : 'Schedule is the same',
+				schedule: scheduleDoc
+				});
+			} else {
+				return res.json({
+					success: false,
+					message: 'Schedule does not exist'
+				});
+			}
+			}).catch(err => {
+			return res.status(400).json({
+				message: 'Database error: Could not update schedule',
+				error: err
+			});
+		});
+	}
 }
 
 export default new Schedules();

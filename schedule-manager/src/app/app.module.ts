@@ -19,7 +19,7 @@ import { EditUsersComponent,
          EditUnavailabilityDialogComponent } from './components/settings/edit-users/edit-users.component';
 import { AppComponent } from './app.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { ScheduleComponent, ScheduleInputDialog } from './components/schedule/schedule.component';
+import { ScheduleComponent } from './components/schedule/schedule.component';
 import { ReportsComponent } from './components/reports/reports.component';
 import { LoginComponent } from './components/login/login.component';
 
@@ -56,6 +56,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatDrpModule } from 'ngx-mat-daterange-picker';
 import { JwtTokenInterceptor } from './services/jwt-token-interceptor';
 import { AuthErrorHandler } from './services/auth-error-handler';
+import { DeleteEmployeeDialogComponent } from './components/schedule/dialogs/deleteUserDialog/deleteUserDialog.component';
+import { ScheduleInputDialog } from './components/schedule/dialogs/scheduleInputDialog/scheduleInputDialog.component';
 
 @NgModule({
     declarations: [
@@ -63,6 +65,7 @@ import { AuthErrorHandler } from './services/auth-error-handler';
         SettingsComponent,
         ScheduleComponent,
         ScheduleInputDialog,
+        DeleteEmployeeDialogComponent,
         ReportsComponent,
         AddUserComponent,
         EditUsersComponent,
@@ -122,6 +125,6 @@ import { AuthErrorHandler } from './services/auth-error-handler';
             }],
     bootstrap: [AppComponent],
     // the dialog components need to be declared here
-    entryComponents: [DeleteDialogComponent, EditDialogComponent, EditUnavailabilityDialogComponent, ScheduleInputDialog]
+    entryComponents: [DeleteDialogComponent, EditDialogComponent, EditUnavailabilityDialogComponent, ScheduleInputDialog, DeleteEmployeeDialogComponent]
 })
 export class AppModule { }

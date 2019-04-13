@@ -1,0 +1,80 @@
+<!-- Should date information on the title -->
+<h1 mat-dialog-title>Add employees to schedule :-)</h1>
+<!-- Main Wrapper div -->
+<div> 
+	<div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between">
+		<div> <!-- Sub Wrapper div-->
+			<mat-card fxLayout="column" fxFlex="48%" appearance="outline">
+				<div fxLayout="row" fxLayoutAlign="space-between">
+					<form [formGroup]="form" novalidate>
+						<mat-form-field>
+							<mat-label>Starting hour</mat-label>
+							<input matInput placeholder="Shift start time" formControlName="fromTime" required>
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Ending hour</mat-label>
+							<input matInput placeholder="Shift end time" formControlName="toTime" required>
+						</mat-form-field>
+						<mat-form-field>
+							<mat-label>Employee</mat-label>
+							<mat-select formControlName="employee" (selectionChange)="showUnavailabilityInfo($event)">
+								<mat-option *ngFor="let employee of employees" [value]="employee">
+									{{employee.name + ' ' + employee.surname}}
+								</mat-option>
+							</mat-select>
+						</mat-form-field>
+					</form>
+				</div>
+				<div fxLayout="row" fxLayoutAlign="space-between">
+					<div fxLayout="column" fxFlex="48%" appearance="outline">
+						<button mat-button (click)="onNoClick()" class="material-icons">
+							<i class="material-icons">
+								cancel
+							</i>
+						</button>
+					</div>
+					<div fxLayout="column" fxFlex="48%" appearance="outline">
+						<button mat-button (click)="onYesClick()" class="material-icons">
+							<i class="material-icons">
+								done
+							</i>
+						</button>
+					</div>
+				</div>
+			</mat-card>
+			<mat-card fxLayout="column" fxFlex="48%" appearance="outline">
+				<mat-chip-list class="mat-chip-list-stacked">
+					<mat-chip (click)="add(1)">
+						+1h
+					</mat-chip>
+					<mat-chip (click)="add(2)">
+						+2h
+					</mat-chip>
+					<mat-chip (click)="add(4)">
+						+4h
+					</mat-chip>
+					<mat-chip (click)="add(8)">
+						+8h
+					</mat-chip>
+				</mat-chip-list>
+			</mat-card>
+		</div> <!-- Wrapper div-->
+	</div>
+	<div fxLayout="row" fxLayoutAlign="space-between">
+		<mat-card>
+			<mat-card-header> 
+				Unavailability info
+			</mat-card-header>
+			<mat-card-content>
+				<div *ngIf="unavailabilities['perm']['day'] !== ''"> <!--For requested-->
+					<h4>The employee is not available on {{ unavailabilities['perm']['day'] | titlecase }}s during:</h4>
+					<p>{{unavailabilities['perm']['msg']}}</p>
+				</div>
+				<div *ngIf="unavailabilities['req']['from'] !== ''"><!--For requested-->
+					<h4>The employee is not available during this time of selection </h4>
+					<p>{{'From: ' + (unavailabilities['req']['from'] | date) + ' To:' + (unavailabilities['req']['to'] | date)}}</p>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

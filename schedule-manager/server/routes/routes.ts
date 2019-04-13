@@ -36,6 +36,7 @@ class Routes {
         router.get('/', User.getUsers);             // get users through this route
         router.delete('/:id', User.deleteUser);
         router.put('/', User.updateUser);
+        router.put('/unavailability', User.updateUserUnavailability);
         return router;
     }
 
@@ -45,11 +46,7 @@ class Routes {
         router.post('/', Schedule.addSchedules);             // will call insertMany function
         router.get('/:range', Schedule.getScheduleRange);    // get schedules through this route
         router.put('/', Schedule.updateSchedule);
-        // router.delete('/:id', Schedule.deleteSchedule);
-        // router.put('/', Schedule.updateSchedule);
-        // router.delete('/:id', User.deleteUser);     // delete specified user
-        // router.put('/', User.updateUser);           // update users
-        // router.put('/unavailability', User.updateUserUnavailability); // Update unavailability
+        router.put('/remove', Schedule.removeUserFromSchedule);
         return router;
     }
 
