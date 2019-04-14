@@ -53,21 +53,25 @@
 						</div>
 
 						<!-- Position data columns-->
-						<div fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index; "
-							matTooltip="{{time |  date:'HH:mm'}}" matTooltipPosition="above" class="grid-element"
-							fxFlex="0 1 70" [class.evenBackgroundColor]="even"
-							(mouseenter)="onHover(dayIndex, timeIndex, positionIndex, true)"
-							(mouseleave)="onHover(dayIndex, timeIndex, positionIndex, false)"
-							(click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
-							<div *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''">
-								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
-								<button
-									(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
-									*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" matButton>
-									<mat-icon>delete</mat-icon>
-								</button>
-							</div>
-						</div>
+						<div  class="gridStyle" class="fontClass"  class="grid-element"  fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index;"
+                            matTooltip="{{time |  date:'HH:mm'}}" matTooltipPosition="above"
+                            fxFlex="0 1 70" [class.evenBackgroundColor]="even"
+                            (mouseenter)="onHover(dayIndex, timeIndex, positionIndex, true)"
+                            (mouseleave)="onHover(dayIndex, timeIndex, positionIndex, false)"
+                            
+                            [class.buttonLikeClass]="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true"
+                            
+                            (click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
+                            <div *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
+                                {{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
+                                <button
+                                    mat-icon-button
+                                    (click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
+                                    *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" >
+                                    <mat-icon class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
+                                </button>
+                            </div>
+                        </div>
 					</div>
 				</ng-template>
 			</mat-tab>
