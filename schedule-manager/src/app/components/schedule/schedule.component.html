@@ -60,8 +60,6 @@
 							(mouseleave)="onHover(dayIndex, timeIndex, positionIndex, false)"
 							
 							[class.buttonLikeClass]="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" 
-  							(mouseover)="mouseOvered=true"
-  							(mouseout)="mouseOvered=false"
 							
 							(click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
 							<div *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
