@@ -4,7 +4,7 @@
 	<mat-card fxLayout="column" fxFlex="20%" appearance="outline">
 		<mat-form-field>
 			<input matInput [matDatepicker]="picker" placeholder="Choose a date" [value]="startDate.value"
-				(dateInput)="loadWeeklySchedule($event)">
+				(dateInput)="initializeWeekRange($event)">
 			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker [startAt]="endDate"></mat-datepicker>
 		</mat-form-field>
@@ -12,8 +12,8 @@
 
 	<!-- Save changes button -->
 	<mat-card fxLayout="column" fxFlex="20%" appearance="outline">
-		<button mat-raised-button (click)="onSaveSchedule()">
-			Save Changes
+		<button mat-raised-button>
+			Do nothing
 			<mat-icon> done </mat-icon>
 		</button>
 		<!-- Download pdf button-->
@@ -28,8 +28,8 @@
 <!-- Week browser -->
 <mat-card>
 	<mat-card fxLayout="column" fxFlex="70%" appearance="outline">
-		<mat-tab-group id="html2Pdf">
-			<!--   animationDuration="0ms"-->
+		<mat-tab-group id="html2Pdf" animationDuration="300ms">
+			  
 
 			<!-- Tabs containing days of week	-->
 			<mat-tab *ngFor="let day of days;let dayIndex=index" [label]=" day">
