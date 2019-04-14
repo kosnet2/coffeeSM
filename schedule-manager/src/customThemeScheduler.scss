@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+  $primary: mat-palette($mat-blue,600);
+  $accent: mat-palette($mat-green,900);
+
+  $scheduler-theme: mat-light-theme($primary, $accent);
+
+@include angular-material-theme($scheduler-theme);

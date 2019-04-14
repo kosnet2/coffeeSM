@@ -65,13 +65,11 @@ class Schedules {
     updateSchedule(req, res) {
         const scheduleDoc = req.body;
 		const from = new Date(req.body.from);
-		from.setMinutes(from.getMinutes() - 30);
 		const to = new Date(req.body.to);
-		
-		to.setMinutes(to.getMinutes() - 30);	// mongod db lt is not inclusive
+
 		const userId = req.body.userId;
 
-		scheduleModel.updateMany({'dateTime' : {$gt: from, $lt: to }}, {$addToSet: {'allocatedStaff': userId}}).then( response => {
+		scheduleModel.updateMany({'dateTime' : {$gte: from, $lt: to }}, {$addToSet: {'allocatedStaff': userId}}).then( response => {
 	  if (response.n) {
 	      return res.json({
 			success: true,
@@ -91,15 +89,15 @@ class Schedules {
 	  });
         });
 	}
-	
-	removeUserFromSchedule(req, res){
+
+	removeUserFromSchedule(req, res) {
 		const scheduleDoc = req.body;
 		const from = new Date(req.body.from);
 		const to = new Date(req.body.to);
 		to.setMinutes(to.getMinutes() + 30);	// mongod db lt is not inclusive
 		const userId = req.body.userId;
 
-		scheduleModel.updateMany({'dateTime' : {$gt: from, $lt: to }}, { $pull: {'allocatedStaff': userId}}).then( response => {
+		scheduleModel.updateMany({'dateTime' : {$gte: from, $lte: to }}, { $pull: {'allocatedStaff': userId}}).then( response => {
 			if (response.n) {
 				return res.json({
 				success: true,
@@ -119,6 +117,7 @@ class Schedules {
 			});
 		});
 	}
+	// "2019-04-15T03:30:00Z"
 }
 
 export default new Schedules();

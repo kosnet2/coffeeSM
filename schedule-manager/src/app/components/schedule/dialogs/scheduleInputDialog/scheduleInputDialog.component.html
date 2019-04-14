@@ -27,14 +27,14 @@
 				</div>
 				<div fxLayout="row" fxLayoutAlign="space-between">
 					<div fxLayout="column" fxFlex="48%" appearance="outline">
-						<button mat-button (click)="onNoClick()" class="material-icons">
+						<button mat-button color="warn" (click)="onNoClick()" class="material-icons">
 							<i class="material-icons">
 								cancel
 							</i>
 						</button>
 					</div>
 					<div fxLayout="column" fxFlex="48%" appearance="outline">
-						<button mat-button (click)="onYesClick()" class="material-icons">
+						<button mat-button color="accent" (click)="onYesClick()" class="material-icons">
 							<i class="material-icons">
 								done
 							</i>
@@ -61,7 +61,7 @@
 		</div> <!-- Wrapper div-->
 	</div>
 	<div fxLayout="row" fxLayoutAlign="space-between">
-		<mat-card>
+		<mat-card  color="warn">
 			<mat-card-header> 
 				Unavailability info
 			</mat-card-header>

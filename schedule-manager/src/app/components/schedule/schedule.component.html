@@ -4,7 +4,7 @@
 	<mat-card fxLayout="column" fxFlex="20%" appearance="outline">
 		<mat-form-field>
 			<input matInput [matDatepicker]="picker" placeholder="Choose a date" [value]="startDate.value"
-				(dateInput)="loadWeeklySchedule($event)">
+				(dateInput)="initializeWeekRange($event)">
 			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
 			<mat-datepicker #picker [startAt]="endDate"></mat-datepicker>
 		</mat-form-field>
@@ -12,8 +12,8 @@
 
 	<!-- Save changes button -->
 	<mat-card fxLayout="column" fxFlex="20%" appearance="outline">
-		<button mat-raised-button (click)="onSaveSchedule()">
-			Save Changes
+		<button mat-raised-button>
+			Do nothing
 			<mat-icon> done </mat-icon>
 		</button>
 		<!-- Download pdf button-->
@@ -28,11 +28,11 @@
 <!-- Week browser -->
 <mat-card>
 	<mat-card fxLayout="column" fxFlex="70%" appearance="outline">
-		<mat-tab-group id="html2Pdf">
-			<!--   animationDuration="0ms"-->
+		<mat-tab-group id="html2Pdf" animationDuration="300ms">
+			  
 
 			<!-- Tabs containing days of week	-->
-			<mat-tab *ngFor="let day of days;let dayIndex=index" [label]=" day">
+			<mat-tab color="primary" *ngFor="let day of days;let dayIndex=index" [label]=" day">
 				<ng-template matTabContent>
 					<div fxLayout="row" fxLayoutAlign="space-between">
 						<!-- Time title-row -->
@@ -40,12 +40,12 @@
 							<h3>Time</h3>
 						</div>
 						<!-- Positions title-row-->
-						<div fxLayout="column" class="grid-element" *ngFor="let position of currentPositions" fxFlex="0 1 70" >
-							<h3>{{position}}</h3>
+						<div class="fontClass" fxLayout="column" class="grid-element" *ngFor="let position of currentPositions" fxFlex="0 1 70" >
+							<h3 class="fontClass" >{{position}}</h3>
 						</div>
 					</div>
 					<!-- Time Column -->
-					<div fxLayout="row" *ngFor="let time of times; let timeIndex=index; let even = even"
+					<div class="fontClass" fxLayout="row" *ngFor="let time of times; let timeIndex=index; let even = even"
 						fxLayoutAlign="space-between">
 						<div fxLayout="column"  class="grid-element" appearance="outline"  fxFlex="0 1 70"
 							[class.evenBackgroundColor]=" even ">
@@ -53,7 +53,7 @@
 						</div>
 
 						<!-- Position data columns-->
-						<div  class="gridStyle"  class="grid-element" fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index; "
+						<div  class="gridStyle" class="fontClass"  class="grid-element"  fxLayout="column" *ngFor="let position of currentPositions; let positionIndex=index; "
 							matTooltip="{{time |  date:'HH:mm'}}" matTooltipPosition="above" 
 							fxFlex="0 1 70" [class.evenBackgroundColor]="even"
 							(mouseenter)="onHover(dayIndex, timeIndex, positionIndex, true)"
@@ -65,10 +65,10 @@
 							<div *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
 								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
 								<button
-									mat-button
+									mat-icon-button
 									(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
 									*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" > 
-									<mat-icon class="deleteIcon" >delete</mat-icon>  <!--Edit this one to change size of the icon-->
+									<mat-icon class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
 								</button>
 							</div>
 						</div>
