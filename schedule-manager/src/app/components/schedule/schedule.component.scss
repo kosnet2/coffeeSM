@@ -1,17 +1,29 @@
-mat-grid-tile {
-  background: lightblue;
-}
-
 
 .grid-element{
   border-right: solid 1px lightslategray;
-  border-bottom: solid 1px  lightslategray;
+  // border-bottom: solid 1px  lightslategray;
   border-left: solid 1px  rgba(0, 0, 0, 0.181);
   font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 90%;
   align-items: center;
+  
 }
 
+
+
 .evenBackgroundColor{
-  background-color: rgb(245, 245, 245);
+  background-color: rgb(234, 249, 252);
+}
+
+.deleteIcon{
+font-size: 30px;
+position: absolute;
+margin-top: -20px;
+
+
+}
+.buttonLikeClass{
+  background-color:  transparentize($color: #1b6c9f, $amount: 0.8);
+  cursor: pointer;
+  
 }

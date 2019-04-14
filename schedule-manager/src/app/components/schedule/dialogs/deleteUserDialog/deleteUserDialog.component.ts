@@ -3,7 +3,8 @@ import { Component } from "@angular/core";
 
 @Component({
 	selector: 'app-delete-dialog',
-	templateUrl: './deleteUserDialog.component.html'
+	templateUrl: './deleteUserDialog.component.html',
+
  })
  export class DeleteEmployeeDialogComponent {
 	constructor(

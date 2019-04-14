@@ -251,6 +251,17 @@ export class ScheduleComponent implements OnInit {
 		this.currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] = hoverState;
 	}
 
+	addClass(event): void {
+		event.target.className += 'buttonLikeClass';
+	  }
+	
+	removeClass(event): void {
+		event.target.className = event.target.className.replace('buttonLikeClass', '');
+	  }
+
+
+
+
 	// __________ Open Dialog Functions__________
 	
 	/* --> Will open a popup for user to add employee to the schedule
@@ -423,7 +434,7 @@ export class ScheduleComponent implements OnInit {
 	// works but image quality is still poor.
 	downloadPDF() {
 		const div = document.getElementById("html2Pdf");	// Get the html element for conversion based on id		// scale: 2 scale: 3, dpi: 300
-		const options = { background: "white", height: div.clientHeight, width: div.clientWidth, scale: 1, dpi: 300 };
+		const options = { background: "white", height: div.clientHeight, width: div.clientWidth, scale: 1, dpi: 3000 };
 
 
 		html2canvas(div, options).then((canvas) => {
