@@ -1,7 +1,12 @@
-<ul>
-    <li><button (click)= "onNavigate('/schedule')"><a routerLink="schedule"></a>Schedule</button></li>
-    <li><button (click)= "onNavigate('/settings')"><a routerLink="settings"></a>Settings</button></li>
-    <li><button (click)= "onNavigate('/reports')"><a routerLink="reports"></a>Reports</button></li>
-    <li *ngIf="isLoggedIn()"><button (click)= "logout()"><a routerLink="reports"></a>Logout</button></li>
-</ul>
-<router-outlet></router-outlet>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav role="navigation">
+        <app-sidenav-list (sidenavClose)="sidenav.close()"></app-sidenav-list>	
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <app-header (sidenavToggle)="sidenav.toggle()"></app-header>
+        <main>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>
+

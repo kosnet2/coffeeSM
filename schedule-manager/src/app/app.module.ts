@@ -47,17 +47,21 @@ import { MatInputModule,
          MatTabsModule,
          MatChipsModule,
          MatTooltipModule,
-         MatSnackBarModule} from '@angular/material';
+         MatSnackBarModule,
+         MatToolbarModule,
+         MatSidenavModule} from '@angular/material';
 
 import { CommonModule } from '@angular/common';
 import { SchedulePickerService } from './services/schedule-picker.service';
-import { ScheduleService } from './services/schedule.service';     
+import { ScheduleService } from './services/schedule.service';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatDrpModule } from 'ngx-mat-daterange-picker';
 import { JwtTokenInterceptor } from './services/jwt-token-interceptor';
 import { AuthErrorHandler } from './services/auth-error-handler';
 import { DeleteEmployeeDialogComponent } from './components/schedule/dialogs/deleteUserDialog/deleteUserDialog.component';
 import { ScheduleInputDialog } from './components/schedule/dialogs/scheduleInputDialog/scheduleInputDialog.component';
+import { HeaderComponent } from './components/navigation/header/header.component';
+import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
 
 @NgModule({
     declarations: [
@@ -74,7 +78,9 @@ import { ScheduleInputDialog } from './components/schedule/dialogs/scheduleInput
         EditDialogComponent,
         EditUnavailabilityDialogComponent,
         EditPositionsComponent,
-        LoginComponent
+        LoginComponent,
+        HeaderComponent,
+        SidenavListComponent
     ],
     imports: [
         BrowserModule,
@@ -106,11 +112,11 @@ import { ScheduleInputDialog } from './components/schedule/dialogs/scheduleInput
         MatSnackBarModule,
         NgxMatDrpModule,
         FlexLayoutModule,
-
+        MatToolbarModule,
+        MatSidenavModule
     ],
-    
     providers: [
-            SchedulePickerService, 
+            SchedulePickerService,
             ScheduleService,
             UserService,
             PositionsService,
