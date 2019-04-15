@@ -33,12 +33,13 @@ align-self: auto;
 
 }
 .buttonLikeClass{
-  background-color:  transparentize($color: #1b6c9f, $amount: 0.8);
-  -webkit-transition: background-color 0.5s ease-in; /* Safari */
-          transition: background-color 0.5s ease-in;
-  -webkit-transition-delay: 0.5s; /* Safari */
-          transition-delay: 0.5s;
   cursor: pointer;
+  background-color:  transparentize($color: #1b6c9f, $amount: 0.7);
+  -webkit-transition: background-color 0.3s ease-in; /* Safari */
+          transition: background-color 0.3s ease-in;
+  -webkit-transition-delay: 0.3s; /* Safari */
+          transition-delay: 0.3s;
+
   
 }
 

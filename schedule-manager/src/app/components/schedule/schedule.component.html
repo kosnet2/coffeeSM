@@ -27,7 +27,7 @@
 
 <!-- Week browser -->
 <mat-card>
-	<mat-card fxLayout="column" fxFlex="70%" appearance="outline">
+	<mat-card fxLayout="column" fxFlex="75%" appearance="outline">
 		<mat-tab-group id="html2Pdf" animationDuration="300ms">
 			  
 
@@ -79,10 +79,9 @@
 	</mat-card>
 
 	<!-- Show employees component -->
-	<div fxLayout="column" fxFlex="29%" appearance="outline">
-		<mat-card appearance="outline" fxLayout="column" fxFlex="29%" appearance="outline">
+	<div fxLayout="column" fxFlex="25%" appearance="outline">
+		<div fxLayout="column" fxFlex="25%" appearance="outline">
 			<mat-card-content>
-				This will need to have a sorting selection!
 				<mat-accordion>
 					<mat-expansion-panel *ngFor="let user of users; let i = index" (opened)="panelOpenState = true"
 						(closed)="panelOpenState = false">
@@ -94,15 +93,11 @@
 								{{userHours[user._id]}}
 							</mat-panel-description>
 						</mat-expansion-panel-header>
-						<mat-form-field>
-							<input matInput placeholder="Here should be the edit hours">
-						</mat-form-field>
-						<mat-form-field>
-							<input matInput placeholder="Here should be the edit hours">
-						</mat-form-field>
+						<p>Monday hours: dummydata</p>
+						<p>Tuesday hours: dummydata</p>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-card-content>
-		</mat-card>
+		</div>
 	</div>
 </mat-card>

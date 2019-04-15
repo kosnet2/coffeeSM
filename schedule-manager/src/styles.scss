@@ -5,31 +5,19 @@
 
 //deeppurple-amber.css
 
-// .acceptButtonStyles{
-//     background-color:green;
-//         color: green;
-
-//     .mat-icon{
-//         background-color:green;
-//         color: green;
-//     }
-// }
-
-// .cancelButtonStyles{
-
-//     .mat-button{
-//         background-color:red;
-//         color: red;
-//         font-size: 50px;
-//     }
-
-//     .mat-icon{
-//         background-color:red;
-//         color: red;
-//     }
-// }
 
 html, body {
     margin: 0;
     height: 100%;
 }
+
+.unavailabilityBox{
+    margin: auto;
+    transition: all .5s ease-in-out;
+       
+}
+
+.center{
+    margin: auto;
+}
+
