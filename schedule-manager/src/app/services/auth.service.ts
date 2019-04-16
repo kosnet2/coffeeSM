@@ -11,6 +11,7 @@ import * as jwt_decode from 'jwt-decode';
 export class AuthService {
   private userInfo: User = null;
   private jwtToken = '';
+  private loggedIn: boolean;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -24,6 +25,7 @@ export class AuthService {
 
     const date = new Date(0);
     date.setUTCSeconds(decoded.exp);
+    console.log(decoded);
     return date;
   }
 
@@ -42,6 +44,9 @@ export class AuthService {
     const localToken = localStorage.getItem('token');
     if (localToken) {
       this.jwtToken = localToken;
+      this.userInfo = JSON.parse(localStorage.getItem('user'));
+    } else if (sessionToken) {
+      this.jwtToken = sessionToken;
       this.userInfo = JSON.parse(sessionStorage.getItem('user'));
     }
   }
@@ -70,6 +75,7 @@ export class AuthService {
     sessionStorage.removeItem('user');
     this.jwtToken = '';
     this.userInfo = null;
+    this.loggedIn = false;
     this.router.navigate(['/login']);
   }
 
@@ -95,7 +101,10 @@ export class AuthService {
 
   /* Check if the current user browsing is logged in */
   isLoggedIn(): boolean {
-    return this.jwtToken > '' && !this.isTokenExpired();
+    if (this.loggedIn === true) {
+      return true;
+    }
+    this.loggedIn = this.jwtToken > '' && !this.isTokenExpired();
+    return this.loggedIn;
   }
-
 }

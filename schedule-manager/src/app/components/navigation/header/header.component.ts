@@ -9,7 +9,6 @@ import { AuthService } from 'src/app/services/auth.service';
 export class HeaderComponent implements OnInit {
   @Output() public sidenavToggle = new EventEmitter();
   title = 'Coffeeology Schedule Manager';
-
   constructor(private auth: AuthService) { }
 
   ngOnInit() {

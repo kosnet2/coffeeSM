@@ -19,9 +19,9 @@ export class LoginComponent implements OnInit {
         public snackBar: MatSnackBar) {
 
         // Redirect user if already logged in
-        this.auth.loadStorageToken();
+        auth.loadStorageToken();
         if (auth.isLoggedIn()) {
-            this._router.navigate(['/schedule']);
+            _router.navigate(['/schedule']);
         }
     }
 
@@ -40,12 +40,12 @@ export class LoginComponent implements OnInit {
             this.auth.user = res.user;
             this.auth.token = res.jwt_token;
             let storage;
-            // if (this.rememberMe) {
-            //     storage = localStorage;
-            // } else {
-            storage = sessionStorage;
-            localStorage.removeItem('token');
-            // }
+            if (this.rememberMe) {
+                storage = localStorage;
+            } else {
+                storage = sessionStorage;
+                localStorage.removeItem('token');
+            }
             storage.setItem('token', res.jwt_token);
             storage.setItem('user', JSON.stringify(res.user));
 

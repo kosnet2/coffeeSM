@@ -62,6 +62,7 @@ import { DeleteEmployeeDialogComponent } from './components/schedule/dialogs/del
 import { ScheduleInputDialog } from './components/schedule/dialogs/scheduleInputDialog/scheduleInputDialog.component';
 import { HeaderComponent } from './components/navigation/header/header.component';
 import { SidenavListComponent } from './components/navigation/sidenav-list/sidenav-list.component';
+import { ColorService } from './services/color.service';
 
 @NgModule({
     declarations: [
@@ -119,6 +120,7 @@ import { SidenavListComponent } from './components/navigation/sidenav-list/siden
             SchedulePickerService,
             ScheduleService,
             UserService,
+            ColorService,
             PositionsService,
             {
                 provide: HTTP_INTERCEPTORS,

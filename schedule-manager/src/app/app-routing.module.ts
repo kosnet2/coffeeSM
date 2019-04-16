@@ -23,23 +23,23 @@ const routes: Routes = [
             { path: 'editUsers', component: EditUsersComponent },
             { path: 'editPositions', component: EditPositionsComponent }
         ],
-        // canActivate: [
-        //    AuthGuard
-        // ]
+        canActivate: [
+           AuthGuard
+        ]
     },
     {
         path: 'schedule',
         component : ScheduleComponent,
-        // canActivate: [
-        //     AuthGuard
-        // ]
+        canActivate: [
+            AuthGuard
+        ]
     },
     {
         path: 'reports',
         component: ReportsComponent,
-        // canActivate: [
-        //     AuthGuard
-        // ]
+        canActivate: [
+            AuthGuard
+        ]
     },
     {
         path: '**', // redirect to schedule, we could also have a 404 page not found here
