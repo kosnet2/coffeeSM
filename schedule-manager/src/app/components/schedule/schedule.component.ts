@@ -11,6 +11,7 @@ import html2canvas from 'html2canvas';
 import { DeleteEmployeeDialogComponent } from './dialogs/deleteUserDialog/deleteUserDialog.component';
 import { ScheduleInputDialog } from './dialogs/scheduleInputDialog/scheduleInputDialog.component';
 import { Observable } from 'rxjs';
+import { ColorService } from 'src/app/services/color.service';
 
 @Component({
 	selector: 'app-schedule',
@@ -49,9 +50,9 @@ export class ScheduleComponent implements OnInit {
 		private us: UserService,
 		private ss: ScheduleService,
 		private ps: PositionsService,
+		private cs: ColorService,
 		public dialog: MatDialog,
-		private snackBar: MatSnackBar,
-		private ref: ChangeDetectorRef) { }
+		private snackBar: MatSnackBar) { }
 
 	// __________ On initiation__________
 	ngOnInit() {
@@ -63,12 +64,16 @@ export class ScheduleComponent implements OnInit {
 	// Functions used for initialization
 	getUsers() {
 	this.us.getUsers().subscribe(res => {
+			let i = 0;
 			for (const r of res) {				// If something is fetched
 				let user = new User();			// Create new user
 				user = r;									//  Place fetched user into local variable
 				if (user.priviledge !== 'logistics') {		// Check if you got anything else but logistics user
+
+					user['color'] = this.cs.getColorFor(i);
 					this.users.push(user);			// Push the user into an array of users
 					this.userHours[user._id] = 0;
+					i++;
 				}
 			}
 		});
@@ -124,6 +129,7 @@ export class ScheduleComponent implements OnInit {
 				// positionIndex
 				for (let k = 0; k < this.currentPositions.length ; k++) {
 					this.currentWeekDom[i][j].push({
+						'color': '',
 						'alias': '',
 						'hovering': false,
 						'id' : ''
@@ -196,6 +202,7 @@ export class ScheduleComponent implements OnInit {
 					allocatedStaff: []
 				};
 				for (let k = 0; k < this.currentPositions.length; k++) {
+					this.currentWeekDom[dayIndex][timeIndex][k].color = '';
 					this.currentWeekDom[dayIndex][timeIndex][k].alias = '';
 					this.currentWeekDom[dayIndex][timeIndex][k].id = '';
 				}
@@ -208,6 +215,7 @@ export class ScheduleComponent implements OnInit {
 					});
 					if (user) {
 						this.userHours[userId] += this.hourCost;
+						this.currentWeekDom[dayIndex][timeIndex][positionIndex].color = user['color'];
 						this.currentWeekDom[dayIndex][timeIndex][positionIndex].alias = user.alias;
 						this.currentWeekDom[dayIndex][timeIndex][positionIndex].id = user._id;
 						toAdd.allocatedStaff.push(userId);
@@ -229,6 +237,7 @@ export class ScheduleComponent implements OnInit {
 					allocatedStaff: []
 				};
 				for (let k = 0; k < this.currentPositions.length; k++) {
+					this.currentWeekDom[dayIndex][timeIndex][k].color = '';
 					this.currentWeekDom[dayIndex][timeIndex][k].alias = '';
 					this.currentWeekDom[dayIndex][timeIndex][k].id = '';
 					this.currentWeekDom[dayIndex][timeIndex][k].hovering = false;
@@ -272,10 +281,10 @@ export class ScheduleComponent implements OnInit {
 	addClass(event): void {
 		event.target.className += 'buttonLikeClass';
 	  }
-	
+
 	removeClass(event): void {
 		event.target.className = event.target.className.replace('buttonLikeClass', '');
-	  }
+	}
 
 
 
@@ -353,6 +362,7 @@ export class ScheduleComponent implements OnInit {
 							for (let i = startIndex; i < endIndex; i++) {
 								this.userHours[user._id] += this.hourCost;
 								this.currentWeek[i]['allocatedStaff'].push(user._id);
+								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['color'] = user['color'];
 								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['alias'] = user.alias;
 								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['id'] = user._id;
 							}
@@ -419,6 +429,7 @@ export class ScheduleComponent implements OnInit {
 								// Go in a snake manner on the grid and adjust this user's element properties
 								for (let posId = this.currentPositions.length - 1; posId >= 0; posId--) {
 									if (this.currentWeekDom[domDayIdx][domTimeIdx][posId]['id'] === userId) {
+										this.currentWeekDom[domDayIdx][domTimeIdx][posId]['color'] = '';
 										this.currentWeekDom[domDayIdx][domTimeIdx][posId]['id'] = '';
 										this.currentWeekDom[domDayIdx][domTimeIdx][posId]['alias'] = '';
 									}
@@ -453,7 +464,7 @@ export class ScheduleComponent implements OnInit {
 	// works but image quality is still poor.
 	downloadPDF() {
 		const div = document.getElementById('html2Pdf');	// Get the html element for conversion based on id		// scale: 2 scale: 3, dpi: 300
-		const options = { background: 'white', height: div.clientHeight, width: div.clientWidth, scale: 1, dpi: 1800 };
+		const options = { background: 'white', height: div.clientHeight, width: div.clientWidth, scale: 0.8, dpi: 1800 };
 
 		html2canvas(div, options).then((canvas) => {
 			const doc = new jsPDF('l', 'mm', 'a4');		// Initialize JSPDF  l= landscape p= portrait
@@ -461,7 +472,7 @@ export class ScheduleComponent implements OnInit {
 
 			// addImage(imageData, format, x, y, width, height, alias, compression, rotation)
 			doc.addImage(imgData, 'JPEG', 1, 1);  // Add image Canvas to PDF
-			doc.internal.scaleFactor = 30;
+			doc.internal.scaleFactor = 1;
 
 			const pdfOutput = doc.output();
 			// using ArrayBuffer will allow you to put image inside PDF

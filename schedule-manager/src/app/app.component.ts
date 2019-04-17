@@ -11,7 +11,7 @@ import { AuthService } from './services/auth.service';
 })
 export class AppComponent {
 
-  constructor(private router: Router, private auth: AuthService) { }
+  constructor(private router: Router) { }
 
   onNavigate(url) {
     this.router.navigate([url]);

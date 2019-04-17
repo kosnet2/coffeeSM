@@ -62,7 +62,9 @@
 							[class.buttonLikeClass]="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" 
 							
 							(click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
-							<div *ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
+							<div 
+								[ngStyle]="{'background-color': currentWeekDom[dayIndex][timeIndex][positionIndex]['color']}"
+								*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
 								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
 								<button
 									mat-icon-button
