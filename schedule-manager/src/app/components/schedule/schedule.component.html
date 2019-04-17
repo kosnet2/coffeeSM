@@ -60,17 +60,19 @@
 							(mouseleave)="onHover(dayIndex, timeIndex, positionIndex, false)"
 							
 							[class.buttonLikeClass]="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" 
+
+							[ngStyle]="{'background-color': currentWeekDom[dayIndex][timeIndex][positionIndex]['color']}"
 							
 							(click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
 							<div 
-								[ngStyle]="{'background-color': currentWeekDom[dayIndex][timeIndex][positionIndex]['color']}"
+								
 								*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
 								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
-								<button
-									mat-icon-button
+								<button mat-icon-button
+									
 									(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
 									*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" > 
-									<mat-icon class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
+									<mat-icon [inline]="true" 	class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
 								</button>
 							</div>
 						</div>

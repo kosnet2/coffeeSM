@@ -4,8 +4,8 @@
   border-left: solid 1px  rgba(0, 0, 0, 0.181);
   font-size:90%;
   align-items: center;
-  padding-bottom: 2px;
-  padding-top:2px;
+  padding-bottom: 3px;
+  padding-top:3px;
 
  
   div{
@@ -27,9 +27,8 @@
 
 .deleteIcon{
 font-size: 200%;
-position: absolute;
-margin-top: -10px;
-align-self: auto;
+margin-top:auto;
+
 
 }
 .buttonLikeClass{
@@ -40,8 +39,15 @@ align-self: auto;
   -webkit-transition-delay: 0.3s; /* Safari */
           transition-delay: 0.3s;
 
-  
 }
+
+.mat-icon-button{
+  position:relative;
+  
+  margin-top:-20px;
+  align-items: center;
+}
+
 
 .mat-tab-group.mat-primary .mat-ink-bar,.mat-tab-nav-bar.mat-primary .mat-ink-bar {
   background-color: #2C702A;
