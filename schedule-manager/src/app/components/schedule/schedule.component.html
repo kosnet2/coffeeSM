@@ -48,7 +48,7 @@
 					<div class="fontClass" fxLayout="row" *ngFor="let time of times; let timeIndex=index; let even = even"
 						fxLayoutAlign="space-between">
 						<div fxLayout="column"  class="grid-element" appearance="outline"  fxFlex="0 1 70"
-							[class.evenBackgroundColor]=" even ">
+							[class.evenBackgroundColor]="even">
 							{{time  |  date:'HH:mm' }}
 						</div>
 
@@ -60,16 +60,13 @@
 							(mouseleave)="onHover(dayIndex, timeIndex, positionIndex, false)"
 							
 							[class.buttonLikeClass]="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" 
-
 							[ngStyle]="{'background-color': currentWeekDom[dayIndex][timeIndex][positionIndex]['color']}"
 							
 							(click)="addEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'])">
 							<div 
-								
 								*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
 								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
 								<button mat-icon-button
-									
 									(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
 									*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" > 
 									<mat-icon [inline]="true" 	class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
@@ -88,17 +85,24 @@
 			<mat-card-content>
 				<mat-accordion>
 					<mat-expansion-panel *ngFor="let user of users; let i = index" (opened)="panelOpenState = true"
-						(closed)="panelOpenState = false">
+						(closed)="panelOpenState = false" >
 						<mat-expansion-panel-header>
 							<mat-panel-title>
-								{{user.name  | titlecase}}
+								{{user.name  | titlecase}} 
 							</mat-panel-title>
 							<mat-panel-description>
 								{{userHours[user._id]}}
 							</mat-panel-description>
-						</mat-expansion-panel-header>
-						<p>Monday hours: dummydata</p>
-						<p>Tuesday hours: dummydata</p>
+						</mat-expansion-panel-header >
+							<div>
+								<p>Monday hours: dummydata</p>
+								<p>Tuesday hours: dummydata</p>
+								<p>Wednesday hours: dummydata</p>
+								<p>Thursday hours: dummydata</p>
+								<p>Friday hours: dummydata</p>
+								<p>Saturday hours: dummydata</p>
+								<p>Sunday hours: dummydata</p>
+							</div>
 					</mat-expansion-panel>
 				</mat-accordion>
 			</mat-card-content>

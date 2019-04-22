@@ -12,6 +12,8 @@ import { DeleteEmployeeDialogComponent } from './dialogs/deleteUserDialog/delete
 import { ScheduleInputDialog } from './dialogs/scheduleInputDialog/scheduleInputDialog.component';
 import { Observable } from 'rxjs';
 import { ColorService } from 'src/app/services/color.service';
+import { forEach } from '@angular/router/src/utils/collection';
+
 
 @Component({
 	selector: 'app-schedule',
@@ -26,6 +28,10 @@ export class ScheduleComponent implements OnInit {
 
 	users: User[] = [];
 	times: Array<Date>;
+
+	timeRepository: Array<Date>;	// Array for saving the tuples
+	timeObject: [string, Date, Date];   // Tuple for saving time objects locally
+
 	dailyHourSlots = 36;
 	timeDiff = 30;
 	hourCost = 0.5;
@@ -139,9 +145,9 @@ export class ScheduleComponent implements OnInit {
 		}
 	}
 	/* --> Function will be called when date is selected on date picker
-	*	 1. It will calculate the first and last day of the week based on new input and
-	*  2. create new time entries for the whole week with 30 min intervals.
-	*  3. It will check if database has the time entries. If not, they will be created
+	* 	1. It will calculate the first and last day of the week based on new input and
+	* 	2. create new time entries for the whole week with 30 min intervals.
+	* 	3. It will check if database has the time entries. If not, they will be created
 	*/
 	initializeWeekRange(event) {
 		if (event === undefined) {
@@ -288,7 +294,6 @@ export class ScheduleComponent implements OnInit {
 
 
 
-
 	// __________ Open Dialog Functions__________
 
 	/* --> Will open a popup for user to add employee to the schedule
@@ -332,28 +337,37 @@ export class ScheduleComponent implements OnInit {
 					if (!this.currentWeek[startIndex]['allocatedStaff'].includes(user._id) &&
 						this.currentWeekDom[dayIndex][startIndex % this.dailyHourSlots][positionIndex]['id'] === '') {
 						break;
-					} else {
+					} 
+					else {
 						sDate.setMinutes(sDate.getMinutes() + this.timeDiff);
 						startIndex++;
 					}
 				}
 
 				// Check if the date range is valid. End - Start does not yield values <= 0
-				const valid = (end.getTime() - sDate.getMinutes()) > 0;
-				if (valid) {
-					const eDate = new Date(sDate);
-					let endIndex = startIndex;
+				const valid = (end.getTime() - sDate.getMinutes()) > 0;  	// Range needs to be between 6:00 - 23:30
+				if (valid) {  			// If valid tie range is provided
+					const eDate = new Date(sDate);   	// Set endDate equal to startDate 
+					let endIndex = startIndex;			// Set endIndex equal to startIndex
 
-					for (; endIndex < this.currentWeek.length && eDate < end;) {
+					for (; endIndex < this.currentWeek.length && eDate < end;) {	// Loop untill the end of the current day
 						// If an invalid coordinate is found
-						if (this.currentWeek[endIndex]['allocatedStaff'].includes(user._id) ||
-							this.currentWeekDom[dayIndex][endIndex % this.dailyHourSlots][positionIndex]['id'] !== '') {
+						if (this.currentWeek[endIndex]['allocatedStaff'].includes(user._id) ||   //If user is already in that position 
+							this.currentWeekDom[dayIndex][endIndex % this.dailyHourSlots][positionIndex]['id'] !== '') {	// or someone else has filled it
 								break;
 						} else { // continue searching
 							endIndex++;
 							eDate.setMinutes(eDate.getMinutes() + this.timeDiff);
 						}
 					}
+					// Else
+							//If date range is not valid, 
+								//check if the user is same
+									// If true, calculate and update time range in local repository
+									// Use the local repository to display the total working hours for that day
+
+
+
 					// update database
 					this.ss.updateSchedule({ 'from': sDate, 'to': eDate, 'userId': user._id + ' ' + positionIndex }).subscribe(r => {
 						// If the schedule has been updated
@@ -487,4 +501,8 @@ export class ScheduleComponent implements OnInit {
 		});
 	}
 	// __________ Dialog for input __________
+
 }
+
+
+
