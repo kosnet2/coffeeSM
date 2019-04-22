@@ -13,6 +13,7 @@ import { ScheduleInputDialog } from './dialogs/scheduleInputDialog/scheduleInput
 import { Observable } from 'rxjs';
 import { ColorService } from 'src/app/services/color.service';
 import { forEach } from '@angular/router/src/utils/collection';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class ScheduleComponent implements OnInit {
 
 	@ViewChild('picker') picker: ElementRef;
 	panelOpenState = false;
+	userPriviledge: string;
 
 	users: User[] = [];
 	times: Array<Date>;
@@ -58,10 +60,15 @@ export class ScheduleComponent implements OnInit {
 		private ps: PositionsService,
 		private cs: ColorService,
 		public dialog: MatDialog,
-		private snackBar: MatSnackBar) { }
+		private snackBar: MatSnackBar,
+		private auth: AuthService) { }
 
 	// __________ On initiation__________
 	ngOnInit() {
+		if (this.auth.isLoggedIn()) {
+			this.auth.loadStorageToken();
+			this.userPriviledge = this.auth.user.priviledge;
+		  }
 		this.getUsers();  					// Load users on init from db
 		this.getPositions();				// Load positions on init from db
 		this.initializeWeekRange(undefined);
@@ -301,102 +308,104 @@ export class ScheduleComponent implements OnInit {
 	*  2. It will calculate the first day of week based on given day
 	*/
 	addEmployee(dayIndex, timeIndex, positionIndex): void {		// Take indexes as parameters
-		const dialogRef = this.dialog.open(ScheduleInputDialog, {  // Open the dialog
-			autoFocus: true,
-			data: {												// Data that the dialog has
-				'start': this.times[timeIndex],
-				'dayIndex': dayIndex,
-				'position': this.currentPositions[positionIndex],
-				'users': this.users,
-			}
-		});
-
-		dialogRef.afterClosed().subscribe(res => {			// After dialog is closed
-			if (res) {
-				// update dom element
-				const from = res['fromTime'];			// Get values from dialog
-				const to = res['toTime'];
-				const user: User = res['employee'];
-
-				// get proper day to fill
-				const start = new Date(this.currentWeek[dayIndex * this.dailyHourSlots]['dateTime']);
-				start.setHours(+from.substring(0, 2));
-				start.setMinutes(+from.substring(3));
-
-				const end = new Date(this.currentWeek[dayIndex * this.dailyHourSlots]['dateTime']);
-				end.setHours(+to.substring(0, 2));
-				end.setMinutes(+to.substring(3));
-
-				// we have the dayIndex 0 , the timeIndex 3
-				let startIndex = dayIndex * this.dailyHourSlots + timeIndex;
-				const sDate = new Date(this.currentWeek[startIndex]['dateTime']);
-
-				// Check if this user is not already assigned
-				for (; startIndex < this.currentWeek.length && sDate < end;) {
-					// if the user is NOT included in the allocatedStaff we have found the starting point
-					if (!this.currentWeek[startIndex]['allocatedStaff'].includes(user._id) &&
-						this.currentWeekDom[dayIndex][startIndex % this.dailyHourSlots][positionIndex]['id'] === '') {
-						break;
-					} 
-					else {
-						sDate.setMinutes(sDate.getMinutes() + this.timeDiff);
-						startIndex++;
-					}
+		if (this.userPriviledge === 'manager') {
+			const dialogRef = this.dialog.open(ScheduleInputDialog, {  // Open the dialog
+				autoFocus: true,
+				data: {												// Data that the dialog has
+					'start': this.times[timeIndex],
+					'dayIndex': dayIndex,
+					'position': this.currentPositions[positionIndex],
+					'users': this.users,
 				}
+			});
 
-				// Check if the date range is valid. End - Start does not yield values <= 0
-				const valid = (end.getTime() - sDate.getMinutes()) > 0;  	// Range needs to be between 6:00 - 23:30
-				if (valid) {  			// If valid tie range is provided
-					const eDate = new Date(sDate);   	// Set endDate equal to startDate 
-					let endIndex = startIndex;			// Set endIndex equal to startIndex
+			dialogRef.afterClosed().subscribe(res => {			// After dialog is closed
+				if (res) {
+					// update dom element
+					const from = res['fromTime'];			// Get values from dialog
+					const to = res['toTime'];
+					const user: User = res['employee'];
 
-					for (; endIndex < this.currentWeek.length && eDate < end;) {	// Loop untill the end of the current day
-						// If an invalid coordinate is found
-						if (this.currentWeek[endIndex]['allocatedStaff'].includes(user._id) ||   //If user is already in that position 
-							this.currentWeekDom[dayIndex][endIndex % this.dailyHourSlots][positionIndex]['id'] !== '') {	// or someone else has filled it
-								break;
-						} else { // continue searching
-							endIndex++;
-							eDate.setMinutes(eDate.getMinutes() + this.timeDiff);
+					// get proper day to fill
+					const start = new Date(this.currentWeek[dayIndex * this.dailyHourSlots]['dateTime']);
+					start.setHours(+from.substring(0, 2));
+					start.setMinutes(+from.substring(3));
+
+					const end = new Date(this.currentWeek[dayIndex * this.dailyHourSlots]['dateTime']);
+					end.setHours(+to.substring(0, 2));
+					end.setMinutes(+to.substring(3));
+
+					// we have the dayIndex 0 , the timeIndex 3
+					let startIndex = dayIndex * this.dailyHourSlots + timeIndex;
+					const sDate = new Date(this.currentWeek[startIndex]['dateTime']);
+
+					// Check if this user is not already assigned
+					for (; startIndex < this.currentWeek.length && sDate < end;) {
+						// if the user is NOT included in the allocatedStaff we have found the starting point
+						if (!this.currentWeek[startIndex]['allocatedStaff'].includes(user._id) &&
+							this.currentWeekDom[dayIndex][startIndex % this.dailyHourSlots][positionIndex]['id'] === '') {
+							break;
+						} 
+						else {
+							sDate.setMinutes(sDate.getMinutes() + this.timeDiff);
+							startIndex++;
 						}
 					}
-					// Else
-							//If date range is not valid, 
-								//check if the user is same
-									// If true, calculate and update time range in local repository
-									// Use the local repository to display the total working hours for that day
 
+					// Check if the date range is valid. End - Start does not yield values <= 0
+					const valid = (end.getTime() - sDate.getMinutes()) > 0;  	// Range needs to be between 6:00 - 23:30
+					if (valid) {  			// If valid tie range is provided
+						const eDate = new Date(sDate);   	// Set endDate equal to startDate 
+						let endIndex = startIndex;			// Set endIndex equal to startIndex
 
-
-					// update database
-					this.ss.updateSchedule({ 'from': sDate, 'to': eDate, 'userId': user._id + ' ' + positionIndex }).subscribe(r => {
-						// If the schedule has been updated
-						if (r.success === true) {
-							// go through all the weekly elements
-							for (let i = startIndex; i < endIndex; i++) {
-								this.userHours[user._id] += this.hourCost;
-								this.currentWeek[i]['allocatedStaff'].push(user._id);
-								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['color'] = user['color'];
-								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['alias'] = user.alias;
-								this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['id'] = user._id;
+						for (; endIndex < this.currentWeek.length && eDate < end;) {	// Loop untill the end of the current day
+							// If an invalid coordinate is found
+							if (this.currentWeek[endIndex]['allocatedStaff'].includes(user._id) ||   //If user is already in that position 
+								this.currentWeekDom[dayIndex][endIndex % this.dailyHourSlots][positionIndex]['id'] !== '') {	// or someone else has filled it
+									break;
+							} else { // continue searching
+								endIndex++;
+								eDate.setMinutes(eDate.getMinutes() + this.timeDiff);
 							}
-
-							this.snackBar.open('The user has been added', 'OK', {
-								duration: 5000,
-								horizontalPosition: 'center',
-								verticalPosition: 'top',
-							});
-						} else {
-							this.snackBar.open('The user has NOT been added', 'OK', {
-								duration: 5000,
-								horizontalPosition: 'center',
-								verticalPosition: 'top',
-							});
 						}
-					});
+						// Else
+								//If date range is not valid, 
+									//check if the user is same
+										// If true, calculate and update time range in local repository
+										// Use the local repository to display the total working hours for that day
+
+
+
+						// update database
+						this.ss.updateSchedule({ 'from': sDate, 'to': eDate, 'userId': user._id + ' ' + positionIndex }).subscribe(r => {
+							// If the schedule has been updated
+							if (r.success === true) {
+								// go through all the weekly elements
+								for (let i = startIndex; i < endIndex; i++) {
+									this.userHours[user._id] += this.hourCost;
+									this.currentWeek[i]['allocatedStaff'].push(user._id);
+									this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['color'] = user['color'];
+									this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['alias'] = user.alias;
+									this.currentWeekDom[dayIndex][i % this.dailyHourSlots][positionIndex]['id'] = user._id;
+								}
+
+								this.snackBar.open('The user has been added', 'OK', {
+									duration: 5000,
+									horizontalPosition: 'center',
+									verticalPosition: 'top',
+								});
+							} else {
+								this.snackBar.open('The user has NOT been added', 'OK', {
+									duration: 5000,
+									horizontalPosition: 'center',
+									verticalPosition: 'top',
+								});
+							}
+						});
+					}
 				}
-			}
-		});
+			});
+		}
 	}
 
 	/* Pops a dialog where the is asked to confirm employee removal from schedule */
