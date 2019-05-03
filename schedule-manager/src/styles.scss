@@ -30,7 +30,12 @@ html, body {
      
   }
 
-.centerButton{
-    margin-bottom: 20%;
-    padding-bottom: 50%;
+.container{
+    position: relative;
+}
+
+.centerIcon{
+    position: absolute;
+    top:50%;
+    left: 50%;
 }
