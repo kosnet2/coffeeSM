@@ -83,15 +83,19 @@
 	<div fxLayout="column" fxFlex="25%" appearance="outline">
 		<div fxLayout="column" fxFlex="25%" appearance="outline">
 			<mat-card-content>
+				<h4 style="text-align:center"> {{startDate.value | date:'dd MMM' }} - {{ endDate | date:'dd MMM' }}   </h4>
 				<mat-accordion>
 					<mat-expansion-panel *ngFor="let user of users; let i = index" (opened)="panelOpenState = true"
 						(closed)="panelOpenState = false" >
 						<mat-expansion-panel-header>
 							<mat-panel-title>
-								{{user.name  | titlecase}} 
+								{{user.alias  | titlecase}} 
 							</mat-panel-title>
-							<mat-panel-description>
-								{{userHours[user._id]}}
+							<mat-panel-description >
+								<div style="text-align:center" >
+										{{userHours[user._id]}}
+								</div>
+								
 							</mat-panel-description>
 						</mat-expansion-panel-header >
 							<div>

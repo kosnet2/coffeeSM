@@ -49,8 +49,25 @@
   </mat-card-content>
   <mat-card-actions>
     <div fxLayout="row" fxLayoutAlign="space-between">
-      <button mat-raised-button (click)="onUpdatePositions()" [disabled]="form.pristine || form.invalid" fxLayout="column" fxFlex="45%">Accept</button>
-      <button mat-raised-button fxLayout="column" fxFlex="45%">Cancel</button>
+      <div fxLayout="column" fxFlex="45%" class="container"> 
+        <button mat-button (click)="onUpdatePositions()" 
+        [disabled]="form.pristine || form.invalid" 
+         color="accent" class="material-icons" matTooltip="Accept changes" class="conterIcon"> 
+        <i class="material-icons">
+          done
+        </i>  
+     </button>
+  </div>
+    <div fxLayout="column" fxFlex="45%" class="container">
+        <button mat-button  color="warn"  class="material-icons" matTooltip="Cancel and close form" class="centerIcon">
+            <i class="material-icons">
+                cancel
+            </i>
+        </button>
+    </div>
     </div>
   </mat-card-actions>
 </mat-card>
+
+
+

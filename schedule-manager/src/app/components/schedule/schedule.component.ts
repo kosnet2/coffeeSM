@@ -385,12 +385,14 @@ export class ScheduleComponent implements OnInit {
 								duration: 5000,
 								horizontalPosition: 'center',
 								verticalPosition: 'top',
+								panelClass: ['accent'],
 							});
 						} else {
 							this.snackBar.open('The user has NOT been added', 'OK', {
 								duration: 5000,
 								horizontalPosition: 'center',
 								verticalPosition: 'top',
+								panelClass: ['warning'],
 							});
 						}
 					});

@@ -31,16 +31,16 @@
     <hr fxLayout = "row">
     <div fxLayout="row">
         <button fxFlex fxLayout="column" mat-flat-button color="basic" (click)="onEditUser(i)">
-          <mat-icon>edit</mat-icon>
+          <mat-icon>edit</mat-icon> Edit users
         </button>
         <button fxFlex *ngIf="userPriviledge === 'manager'" fxLayout="column" [disabled]="user.priviledge === 'logistics'"  mat-flat-button color="basic" (click)="onEditUserUnavailability(i)">
-          <mat-icon>schedule</mat-icon>
+          <mat-icon>schedule</mat-icon> Edit unavailability
         </button>
         <button fxFlex *ngIf="userPriviledge === 'manager'" fxLayout="column"  mat-flat-button color="basic" (click)="onDeleteUser(i)">
-          <mat-icon>delete</mat-icon>
+          <mat-icon>delete</mat-icon> Delete users
         </button>
         <button fxFlex fxLayout="column"  mat-flat-button matSuffix color="basic" (click)="setStep(-1)">
-            <mat-icon>expand_less</mat-icon>
+            <mat-icon>expand_less</mat-icon> 
         </button>
     </div>
   </mat-expansion-panel>
