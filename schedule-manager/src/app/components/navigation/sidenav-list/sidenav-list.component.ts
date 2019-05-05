@@ -9,11 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
 export class SidenavListComponent implements OnInit {
 
   @Output() sidenavClose = new EventEmitter();
-
   constructor(private auth: AuthService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   public onSidenavClose() {
     this.sidenavClose.emit();
@@ -23,7 +21,7 @@ export class SidenavListComponent implements OnInit {
     return this.auth.isLoggedIn();
   }
 
-  logout(): void {
+  logout() {
     this.auth.logout();
   }
 }

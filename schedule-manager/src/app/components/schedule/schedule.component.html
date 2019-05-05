@@ -69,9 +69,11 @@
 							<div 
 								*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['alias'] !== ''" >
 								{{currentWeekDom[dayIndex][timeIndex][positionIndex]['alias']}}
+								
+								<!-- deleting button should be shown only to managers -->
 								<button mat-icon-button
-									(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()"
-									*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true" > 
+								*ngIf="currentWeekDom[dayIndex][timeIndex][positionIndex]['hovering'] === true && userPriviledge === 'manager'"  
+								(click)="deleteEmployee(dayIndex, timeIndex, positionIndex, currentWeekDom[dayIndex][timeIndex][positionIndex]['id']);$event.stopPropagation()">
 									<mat-icon [inline]="true" 	class="deleteIcon" color="warn" >clear</mat-icon>  <!--Edit this one to change size of the icon-->
 								</button>
 							</div>

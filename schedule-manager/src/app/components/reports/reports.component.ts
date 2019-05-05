@@ -5,6 +5,7 @@ import { User } from 'src/app/models/user';
 import { ScheduleRange } from 'src/app/models/scheduleRange';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-reports',
@@ -18,6 +19,7 @@ export class ReportsComponent implements OnInit {
   userHours = {};
   schedule: any;
   hourCost = 0.5;
+  userPriviledge: string;
 
   tableColumns = ['name', 'surname', 'hours', 'salary'];
   tableData = [];
@@ -27,9 +29,16 @@ export class ReportsComponent implements OnInit {
   months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   pdf: any;
 
-  constructor(private ss: ScheduleService, private us: UserService) { }
+  constructor(
+    private ss: ScheduleService,
+    private us: UserService,
+    private auth: AuthService) { }
 
   ngOnInit() {
+    if (this.auth.isLoggedIn()) {
+      this.auth.loadStorageToken();
+      this.userPriviledge = this.auth.user.priviledge;
+    }
     this.getUsers();
   }
 
@@ -80,7 +89,6 @@ export class ReportsComponent implements OnInit {
         });
       }
     }
-    console.log(this.tableData);
   }
 
   calculateHours(schedule) {
@@ -104,6 +112,16 @@ export class ReportsComponent implements OnInit {
 
   getUsers() {
     this.us.getUsers().subscribe(res => {
+      if (this.userPriviledge === 'staff') { // if a staff is logged in show individual details
+        for (const r of res) {
+          let user = new User();
+          user = r;
+          if (this.auth.user._id === user._id) {
+            this.users.push(user);
+            this.userHours[user._id] = 0;
+          }
+        }
+      } else {
         for (const r of res) {				// If something is fetched
           let user = new User();			// Create new user
           user = r;									//  Place fetched user into local variable
@@ -113,21 +131,22 @@ export class ReportsComponent implements OnInit {
             this.userHours[user._id] = 0;
           }
         }
-      });
-    }
+      }
+    });
+  }
 
     downloadPDF() {
       const div = document.getElementById('html2Pdf');	// Get the html element for conversion based on id		// scale: 2 scale: 3, dpi: 300
       const options = { background: 'white', height: div.clientHeight, width: div.clientWidth, scale: 0.8, dpi: 1800 };
-  
+
       html2canvas(div, options).then((canvas) => {
         const doc = new jsPDF('l', 'mm', 'a4');		// Initialize JSPDF  l= landscape p= portrait
         const imgData = canvas.toDataURL('image/JPEG');	// Converting canvas to Image
-  
+
         // addImage(imageData, format, x, y, width, height, alias, compression, rotation)
         doc.addImage(imgData, 'JPEG', 1, 1);  // Add image Canvas to PDF
         doc.internal.scaleFactor = 30;
-  
+
         const pdfOutput = doc.output();
         // using ArrayBuffer will allow you to put image inside PDF
         const buffer = new ArrayBuffer(pdfOutput.length);
@@ -135,7 +154,7 @@ export class ReportsComponent implements OnInit {
         for (let i = 0; i < pdfOutput.length; i++) {
           array[i] = pdfOutput.charCodeAt(i);
         }
-  
+
         const fileName = 'example.pdf';  // Name of pdf
         doc.save(fileName);	// Make file
       });
