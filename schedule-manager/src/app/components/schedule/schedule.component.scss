@@ -51,3 +51,17 @@
 .mat-tab-group.mat-primary .mat-ink-bar,.mat-tab-nav-bar.mat-primary .mat-ink-bar {
   background-color: #2C702A;
 }
+
+.headers-align .mat-expansion-panel-header-title,
+.headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.headers-align .mat-expansion-panel-header-description {
+  justify-content: space-around;
+  align-items: center;
+}
+
+mat-form-field {
+  margin-right: 12px;
+}

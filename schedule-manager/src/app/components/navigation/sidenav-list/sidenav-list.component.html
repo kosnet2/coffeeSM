@@ -8,4 +8,7 @@
   <a mat-list-item routerLink="/settings" (click)="onSidenavClose()">
     <mat-icon>assignment_ind</mat-icon> <span class="nav-caption">Settings</span>   
   </a>
+  <a mat-list-item routerLink="/login" (click)="logout(); onSidenavClose()">
+    <span  *ngIf="isLoggedIn()" class="nav-caption">Logout</span>   
+  </a>
 </mat-nav-list>

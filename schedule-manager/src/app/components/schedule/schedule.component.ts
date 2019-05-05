@@ -51,6 +51,9 @@ export class ScheduleComponent implements OnInit {
 	currentPositions = [];	// the list of position to be rendered as columns
 	currentPositionsCount: any;	// the positions configuration that is applied currently
 
+	//Shhhh....
+	easterEggPressed = false;
+
 	// __________ Constructor__________
 	constructor(
 		private us: UserService,
@@ -92,7 +95,7 @@ export class ScheduleComponent implements OnInit {
 			this.currentPositionsCount = res;
 			for (const key in res) {							// For each key brught from DB
 				for (let i = 1; i <= res[key]; i++) {
-					this.currentPositions.push(key + i);
+					this.currentPositions.push(key+ ' '+ i);
 				}
 			}
 			this.initializeSchedules(this.weekRange.start);
@@ -301,6 +304,8 @@ export class ScheduleComponent implements OnInit {
 	*  2. It will calculate the first day of week based on given day
 	*/
 	addEmployee(dayIndex, timeIndex, positionIndex): void {		// Take indexes as parameters
+		const dateBeingModified = new Date(this.currentWeek[dayIndex * this.dailyHourSlots]['dateTime']);
+
 		const dialogRef = this.dialog.open(ScheduleInputDialog, {  // Open the dialog
 			autoFocus: true,
 			data: {												// Data that the dialog has
@@ -308,6 +313,7 @@ export class ScheduleComponent implements OnInit {
 				'dayIndex': dayIndex,
 				'position': this.currentPositions[positionIndex],
 				'users': this.users,
+				'dateBeingModified': dateBeingModified
 			}
 		});
 

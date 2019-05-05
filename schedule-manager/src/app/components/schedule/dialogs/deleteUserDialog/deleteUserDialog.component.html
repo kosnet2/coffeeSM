@@ -1,13 +1,21 @@
 <h2 mat-dialog-title>Remove user from schedule</h2>
-<div mat-dialog-content>
+<div mat-dialog-content style="text-align:center">
   <p>Are you sure?</p>
 </div >
-<div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">
-   no
-  </button>
-  <button mat-button (click)="onYesClick()">
-    yes
-  </button>
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="space-between"> 
+    <div fxLayout="column" fxFlex="48%" appearance="outline" >
+      <button mat-button color="warn" (click)="onNoClick()"  matTooltip="Cancel and close form" >
+        <i class="material-icons">
+          cancel
+        </i>
+      </button>
+    </div>
+    <div fxLayout="column" fxFlex="48%" appearance="outline" >
+      <button mat-button color="accent" (click)="onYesClick()"  matTooltip="Accept changes" >
+        <i class="material-icons" >
+          done
+        </i>
+      </button>
+    </div>
 </div>
 

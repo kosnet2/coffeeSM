@@ -12,8 +12,8 @@
 
 	<!-- Save changes button -->
 	<mat-card fxLayout="column" fxFlex="20%" appearance="outline">
-		<button mat-raised-button>
-			Do nothing
+		<button *ngIf="easterEggPressed" mat-raised-button>
+			Now Do nothing!!!!
 			<mat-icon> done </mat-icon>
 		</button>
 		<!-- Download pdf button-->
@@ -22,6 +22,9 @@
 			<mat-icon> cloud_download </mat-icon>
 		</button>
 	</mat-card>
+	<div fxLayout="column" (click) = "easterEggPressed = true" *ngIf="!easterEggPressed" fxFlex="20%" appearance="outline" style="opacity: 0.03"> 
+		Summon the arcane demons!!
+	</div>
 	<div fxLayout="column" fxFlex="25%"></div> <!-- Pushes the buttons into the middle-->
 </mat-card>
 
@@ -41,7 +44,7 @@
 						</div>
 						<!-- Positions title-row-->
 						<div class="fontClass" fxLayout="column" class="grid-element" *ngFor="let position of currentPositions" fxFlex="0 1 70" >
-							<h3 class="fontClass" >{{position}}</h3>
+							<h3 class="fontClass" >{{ position | titlecase}}</h3>
 						</div>
 					</div>
 					<!-- Time Column -->
@@ -84,7 +87,7 @@
 		<div fxLayout="column" fxFlex="25%" appearance="outline">
 			<mat-card-content>
 				<h4 style="text-align:center"> {{startDate.value | date:'dd MMM' }} - {{ endDate | date:'dd MMM' }}   </h4>
-				<mat-accordion>
+				<mat-accordion class="headers-align">
 					<mat-expansion-panel *ngFor="let user of users; let i = index" (opened)="panelOpenState = true"
 						(closed)="panelOpenState = false" >
 						<mat-expansion-panel-header>
@@ -92,7 +95,7 @@
 								{{user.alias  | titlecase}} 
 							</mat-panel-title>
 							<mat-panel-description>
-								{{userHours[user._id]}}
+								{{userHours[user._id]}}h
 							</mat-panel-description>
 						</mat-expansion-panel-header >
 							<div>

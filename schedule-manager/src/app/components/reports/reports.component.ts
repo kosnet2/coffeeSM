@@ -22,15 +22,16 @@ export class ReportsComponent implements OnInit {
   tableColumns = ['name', 'surname', 'hours', 'salary'];
   tableData = [];
 
+  selectedMonth = -1;
+  selectedYear = -1;
+  months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   pdf: any;
 
   constructor(private ss: ScheduleService, private us: UserService) { }
 
-
   ngOnInit() {
     this.getUsers();
   }
-
 
   onMonthSelected(event) {
     this.picker.close();
@@ -38,6 +39,9 @@ export class ReportsComponent implements OnInit {
 
     monthRange.start = new Date(event.getFullYear(), event.getMonth(), 1);
     monthRange.end = new Date(event.getFullYear(), event.getMonth() + 1, 1);
+
+    this.selectedYear = monthRange.start.getFullYear();
+    this.selectedMonth = monthRange.start.getMonth();
 
     this.ss.getScheduleRange(monthRange).subscribe(res => {
       this.schedule = res;

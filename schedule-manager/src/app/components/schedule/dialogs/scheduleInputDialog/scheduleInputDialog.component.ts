@@ -1,5 +1,4 @@
-import { Component, Output, Inject } from '@angular/core';
-import { EventEmitter } from 'events';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -30,6 +29,9 @@ export class ScheduleInputDialog {
 		}
 	};
 
+	// Date to display on popup
+	dateBeingModified: Date;
+
 	// __________Constructor __________
 	constructor(
 		private fb: FormBuilder,
@@ -49,7 +51,7 @@ export class ScheduleInputDialog {
 		});
 
         // Get position of column entered to know which staff to render on select
-        const pos = this.data.position.substring(0, this.data.position.length - 1);
+        const pos = this.data.position.split(' ')[0];
 
         // Make time inputs uniform visually
         const h = this.data.start.getHours();
@@ -64,6 +66,9 @@ export class ScheduleInputDialog {
 				this.employees.push(user);
 			}
 		}
+
+		// Set the date being modified
+		this.dateBeingModified = new Date(this.data.dateBeingModified);
 	}
 
     /* On button click add the difference to the fromTime to get the toTime value*/
@@ -83,14 +88,17 @@ export class ScheduleInputDialog {
 
     /* Adjusts unavailability status to be used for error messages */
 	showUnavailabilityInfo(employee: any) {
+
+		// Reset each time before processing
+		this.unavailabilities['perm']['day'] = '';
+		this.unavailabilities['perm']['msg'] = '';
+		this.unavailabilities['req']['from'] = '';
+		this.unavailabilities['req']['to'] = '';
+
 		const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         const dayIndex = this.data.dayIndex;
         const dayTitle = days[dayIndex];
-		const start = this.data.start;
 		const employeeUnavailability = employee.value['unavailability'];
-
-        // Get which day is requested to check
-        start.setDate(start.getDate() + dayIndex);
 
 		// Check permanent unavailability
 		const perm = employeeUnavailability['permanent'];
@@ -114,7 +122,7 @@ export class ScheduleInputDialog {
         // between the fromDate - toDate range, display the
         // error message
 		for (const req of requested) {
-			if (start >= new Date(req['fromDate']) && start <= new Date(req['toDate'])) {
+			if (this.dateBeingModified >= new Date(req['fromDate']) && this.dateBeingModified <= new Date(req['toDate'])) {
 				this.unavailabilities['req']['from'] = req['fromDate'];
 				this.unavailabilities['req']['to'] = req['toDate'];
 			}
